@@ -1,0 +1,318 @@
+﻿<section id="main" translate-namespace="EMPLOYEE">
+
+    <section class="container">
+        <div class="col-xs-12 col-sm-12">
+            <p class="lead text-center" translate> .HEADING</p>
+        </div>
+    </section>
+    
+    <section class="container">
+    	<div class="row">
+    		<div class="col-md-8 col-md-offset-2">
+	    		<div class="shift-panel well">
+		    		<div class="row">
+			    			<div class="col-md-6">
+					    		<h2><span translate>.SHIFTSTATUS</span>: <small class="text-danger" ng-hide="shiftOpen" translate>.CLOSED</small> <small class="text-primary" ng-show="shiftOpen" translate>.OPEN</small></h2>
+							</div>
+			    			<div class="col-md-6 text-right">
+				    			<h3 class="cashier-state" ng-show="shiftOpen"> <span class="badge">{{shift.closingBalance}}</span></h3>
+			    			</div>
+			    		</div>
+		    		
+		    		
+		    		<div ng-hide="shiftOpen">
+			    		
+			    		<p translate>.OPENSHIFTTOCREATEINVOICES</p>
+			    		
+			    		<button class="btn btn-primary btn-raised" ng-click="openShift()" translate>.OPENSHIFT</button>
+			    		
+		    		</div>
+		    		
+		    		<div ng-show="shiftOpen">
+			    		
+			    		<div class="row">
+			    			<div class="col-md-6">
+				    			<p><span translate>.SHIFTOPENAT</span> : {{shift.starttime|date:'shortTime'}}</p>
+			    			</div>
+			    			<div class="col-md-6">
+				    			
+			    			</div>
+			    		</div>
+			    		
+			    		<div class="row" ng-if="loggedInUser.role!='waitress' && loggedInUser.role!='kitchen'">
+			    			<div class="col-md-6">
+				    			<!--<button class="btn btn-warning btn-raised" data-toggle="modal" data-target="#modalEditShift">Modify Cashier</button>-->
+                                <button class="btn btn-warning btn-raised" ng-click="openmodifyDialog()">{{ 'MODIFYCASHIER' | translate }}</button>
+
+			    			</div>
+			    			<div class="col-md-6">
+				    			<button class="btn btn-danger btn-raised" ng-click="confirmShift()" translate>.CLOSESHIFT</button>
+				    		</div>
+			    		</div>
+			    		
+			    		
+			    		
+		    		</div>
+		    		
+		    		
+	    		</div>
+    		</div>
+    		
+    	</div>
+    	<div class="row">
+    		<div class="col-md-3 col-md-offset-2">
+	    		<div class="widget-panel well" ng-show="shiftOpen">
+		    		
+		    		<h2>{{ 'LIVESTATS' | translate }}</h2>
+		    		
+		    		<ul class="list-unstyled">
+			    		<li>{{ 'INVOICES' | translate }} <span class="badge">{{(shift.invoices).length}}</span></li>
+			    		<li>{{ 'ORDERS' | translate }} <span class="badge">{{(shift.orders).length}}</span></li>
+			    		
+		    		</ul>
+		    		
+		    		
+		    		
+		    		
+	    		</div>
+    		</div>
+    		<div class="col-md-5 alerts-module" >
+	    		<div class="row" >
+	    			<div class="col-md-12" ng-repeat="notif in ProductionNotification" >
+		    			<div class="alert alert-dismissible alert-warning" ng-if="notif.notType=='Running low'">
+						  <button type="button" class="close" data-dismiss="alert" ng-click="removenotification(notif)">×</button>
+						  <h4>{{notif.productionItem.Name}}</h4>
+						  <small>{{notif.notType}}</small>
+						
+						  <p><strong>{{notif.productionItem.AvailableQuantity.toFixed(2)}} {{notif.productionItem.ProductionUnit}}</strong>
+						 
+						  </p>
+						     <a ui-sref="inventoryManager" href="/inventory" class="alert-link">Resupply <i class="material-icons">keyboard_arrow_right</i></a>
+						</div>
+
+
+                        <div class="alert alert-dismissible alert-danger"  ng-if="notif.notType=='Depleted'">
+                            <button type="button" class="close" data-dismiss="alert" ng-click="removenotification(notif)">×</button>
+                            <h4>{{notif.productionItem.Name}}</h4>
+                            <small>{{notif.notType}}</small>
+
+                            <p>
+                                <strong>{{notif.productionItem.AvailableQuantity.toFixed(2)}} {{notif.productionItem.ProductionUnit}}</strong>
+
+                            </p>
+                            <a ui-sref="inventoryManager" href="/inventory" class="alert-link">Resupply <i class="material-icons">keyboard_arrow_right</i></a>
+                        </div>
+	    			</div>
+	    			<div class="col-md-12" ng-repeat="notif in IngredientNotification" >
+		    			<div class="alert alert-dismissible alert-danger" ng-if="notif.notType=='Depleted'">
+						  <button type="button" class="close" data-dismiss="alert" ng-click="removenotification(notif)">×</button>
+						  <h4>{{notif.ingredientsItem.Name}}</h4>
+						  <small>{{notif.notType}}</small>
+						
+						  <p><strong>{{notif.ingredientsItem.Quantity}} {{notif.ingredientsItem.UnitType}}</strong>
+						    
+						  </p>
+						   <a ui-sref="inventoryManager" href="/inventory"class="alert-link">Resupply <i class="material-icons">keyboard_arrow_right</i></a>
+						</div>
+
+                        <div class="alert alert-dismissible alert-warning" ng-if="notif.notType=='Running low'">
+                            <button type="button" class="close" data-dismiss="alert" ng-click="removenotification(notif)">×</button>
+                            <h4>{{notif.ingredientsItem.Name}}</h4>
+                            <small>{{notif.notType}}</small>
+
+                            <p>
+                                <strong>{{notif.ingredientsItem.Quantity}} {{notif.ingredientsItem.UnitType}}</strong>
+                            </p>
+                            <a ui-sref="inventoryManager" href="/inventory" class="alert-link">Resupply <i class="material-icons">keyboard_arrow_right</i></a>
+                        </div>
+	    			</div>
+	    		</div>
+    		</div>
+    	</div>
+    </section>
+
+</section>
+
+<div class="modal fade" id="modalEditShift" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                    <h4 class="modal-title" id="myModalLabel">{{ 'MODIFYCASHIER' | translate }}</h4>
+                </div>
+                <div class="modal-body">
+                   
+                    <div class="togglebutton text-center">
+                        <label>
+                            <span ng-class="{'text-danger':!addModify}">{{ 'REMOVE' | translate }}</span> &nbsp;&nbsp;
+                            <input type="checkbox" ng-bind="addModify" ng-model="Operation" checked>
+                            <span ng-class="{'text-success':addModify}">{{ 'ADD' | translate }}</span>
+                        </label>
+                    </div>
+
+                    <div class="form-group label-floating input-group">
+                        <span class="input-group-addon" ng-show="addModify">+</span>
+                        <span class="input-group-addon" ng-hide="addModify">-</span>
+                        <label class="control-label" for="focusedInput1">{{ 'ENTERAMOUNTTOMODIFY' | translate }}</label>
+                        <input class="form-control" id="focusedInput1" type="number" step="any" ng-model="editedQuantity">
+                        <span class="input-group-addon" ng-bind="shortForm(editIngredient.UnitType)">.</span>
+                    </div>
+                    <p>{{ 'CASHOBSERVATION' | translate }}</p>
+                   <textarea class="form-control" rows="3" ng-model="observation"></textarea>
+                   
+                </div>
+               <div class="modal-footer">
+                    <button type="button" class="btn btn-default" data-dismiss="modal">{{ 'CANCEL' | translate }}</button>
+                    <button type="button" class="btn btn-primary" ng-click="modifyShift()" >{{ 'MODIFYCASHIER' | translate }}</button>
+                    
+                </div>
+            </div>
+        </div>
+    </div>
+
+<div class="modal fade" id="modalOpenShift" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                    <h4 class="modal-title" id="myModalLabel">{{ 'OPENSHIFT' | translate }}</h4>
+                </div>
+                <div class="modal-body">
+                    <p class="lead">{{ 'OPENSHIFTWITH' | translate }}</p>
+                     <div class="form-group">
+					    <label class="sr-only" for="exampleInputAmount">Monto</label>
+					    <div class="input-group">
+					      <div class="input-group-addon">¢</div>
+					      <input type="number" class="form-control" id="exampleInputAmount" placeholder="Amount" ng-model="openShiftCash" value="openShiftCash">
+					      <div class="input-group-addon">.00</div>
+					    </div>
+					  </div>
+                </div>
+               <div class="modal-footer">
+                    <button type="button" class="btn btn-default" data-dismiss="modal"   >{{ 'CANCEL' | translate }}</button>
+                    <button type="button" class="btn btn-primary" ng-click="shiftOn()" data-dismiss="modal" >{{ 'OPENSHIFT' | translate }}</button>
+                    
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+
+
+<!--Textcomment-->
+<div class="modal fade" id="modalConfirmShift" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                    <h4 class="modal-title" id="myModalLabel">{{ 'REALLYCLOSESHIFT' | translate }}</h4>
+                </div>
+                <div class="modal-body">
+                    <p class="lead">{{ 'CLOSINGSHIFT' | translate }}</p>
+                </div>
+               <div class="modal-footer">
+                    <button type="button" class="btn btn-default" data-dismiss="modal"   >{{ 'CANCEL' | translate }}</button>
+                    <button type="button" class="btn btn-primary" ng-click="shiftOff()" data-dismiss="modal" >{{ 'CLOSESHIFTNOW' | translate }}</button>
+                    <button type="button" class="btn btn-primary" ng-click="ReportAndshiftOff(shift)"  data-dismiss="modal" >{{ 'CLOSESHIFTREPORT' | translate }}</button>
+                    
+                </div>
+            </div>
+        </div>
+    </div>
+
+<div class="modal fade" id="modalShiftReport" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                   
+                     <h4 class="modal-title" id="myModalLabel">{{ 'SHIFTREPORT' | translate }}</h4>
+                </div>
+               
+                <!--<div class="modal-body" ng-if="isloading">
+                   
+                    </div>-->
+
+                    <div class="modal-body" >
+
+                        <div ng-if="isloading" class="list-loader">
+                            <i class="material-icons">adjust</i>
+                            <div ng-if="isloading" style="text-align:center;">{{ 'GENERATINGREPORT' | translate }} </div>
+                        </div>
+
+                       <div ng-if="!isloading"> 
+                        <h6>{{ 'OPENAT' | translate }}: {{shiftReport.starttime|date:'shortTime'}}</h6>
+                        <h5>{{ 'INVOICES' | translate }}: <span class="badge">{{(shiftReport.invoices).length}}</span></h5>
+                        <h5>{{ 'ORDERS' | translate }}: <span class="badge">{{(shiftReport.orders).length}}</span></h5>
+                        <h4>{{ 'TOTAL' | translate }} {{ 'CASH' | translate }}: <span class="badge">{{shiftReport.totalCash}}</span></h4>
+                        <h4>{{ 'TOTAL' | translate }} {{ 'CREDIT' | translate }}:  <span class="badge">{{shiftReport.totalCredit}}</span></h4>
+                        <h3>Impuesto de Venta: <span class="badge">{{shiftReport.tax}}</span></h3>
+                        <h3>{{ 'TOTAL' | translate }}  {{ 'SALES' | translate }} : <span class="badge">{{shiftReport.grandTotal}}</span></h3>
+                       </div>
+                        
+                       
+                        
+                        <div class="employeePrecent" ng-if="!isloading">
+	                        <h2>10% de Empleados</h2>
+	                        <ul class="list-group">
+							  <li class="list-group-item" ng-repeat="employee in shiftReport.employeeScore">
+							    <span class="badge">{{employee.Percentage.toFixed(2)}}</span>
+							    {{employee.Employee}}
+							  </li>
+							</ul>
+                        </div>
+                        
+                        
+                        <div class="cashierHistory" ng-if="!isloading">
+	                        <h2>Historial de Caja</h2>
+	                        <ul class="list-group lg-alt">
+                                        <li class="list-group-item">
+                                        
+                                        	
+	                                        	<span class="badge pull-right">{{shift.openingBalance}}</span>
+	                                            <strong>Caja Abierta</strong>
+	                                            <small class="lgi-text">{{shift.openShiftBy}}</small>
+	                                  
+                                            
+                                        </li>
+                                        <li class="list-group-item" ng-repeat="edit in shift.edits">
+                                        
+                                        	
+	                                        	<span class="badge pull-right" ng-if="edit.opertaiontype=='Add'">+ {{edit.editamount}}</span>
+                                            <span class="badge pull-right" ng-if="edit.opertaiontype=='Remove'">- {{edit.editamount}}</span>
+	                                            <strong>{{edit.observation}}</strong>
+	                                            <small class="lgi-text">{{edit.editby}}</small>
+	                                      
+                                            
+                                        </li>
+                                        <!--<li class="list-group-item">
+                                        
+                                       
+	                                        	<span class="badge pull-right">+ 500</span>
+	                                            <strong>Extra cash</strong>
+	                                            <small class="lgi-text">{{getEmployee.firstname}}</small>
+	                                      
+                                            
+                                        </li>-->
+                                        <li class="list-group-item">
+                                        
+                                        	
+	                                        	<span class="badge pull-right">{{shift.closingBalance}}</span>
+	                                            <strong>Cierre de Caja</strong>
+	                                            <small class="lgi-text">{{shift.closeShiftBy}}</small>
+	                                       
+                                            
+                                        </li>
+                                      </ul>
+                        </div>
+
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-default" data-dismiss="modal">{{ 'CANCEL' | translate }}</button>
+                        <button type="button" class="btn btn-primary" ng-click="printReport(shiftReport)" data-dismiss="modal">{{ 'PRINT' | translate }}</button>
+                    </div>
+                </div>
+        </div>
+    </div>
+    

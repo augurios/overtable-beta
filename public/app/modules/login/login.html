@@ -1,0 +1,38 @@
+
+
+        <section id="authenty_preview">
+            <section id="signin_main" class="authenty signin-main">
+                <div class="section-content">
+                  <div class="wrap">
+                      <div class="container">
+                            <div class="form-wrap">
+                                <div class="row">
+                                  <div class="title" data-animation="fadeInDown" data-animation-delay=".8s" waypoint>
+                                     <span  translate-namespace="LOGIN">
+                                     <h1 translate>.HEADING</h1>
+                                      <h5 translate>.TAGLINE </h5></span>
+                                  </div>
+
+                                  <form name="authenticate" ng-submit="vm.authenticate()">
+                                    <div id="form_1" data-animation="bounceIn" waypoint>
+                                        <div class="form-header">
+                                          <i class="fa fa-user"></i>
+                                      </div>
+                                      <div class="form-main">
+                                          <div class="form-group">
+                                            <input  type="text" id="un_1" class="form-control" placeholder="{{ 'EMAIL' | translate }}" ng-model="vm.credential.email" required="required">
+                                            <input type="password" id="pw_1" class="form-control" ng-model="vm.credential.pwd" placeholder="{{ 'PASSWORD' | translate }}" required="required">
+                                            <input type="text" id="tkn_1" class="form-control" placeholder="{{ 'TOKEN' | translate }}" ng-model="vm.credential.token"  required="required">
+                                          </div>
+                                        <button id="signIn_1" type="submit" class="btn btn-block signin">{{ 'SIGNIN' | translate }}</button>
+                                      </div>
+
+                                  </div>
+                                  </form>
+                                </div>
+                            </div>
+                      </div>
+                  </div>
+                </div>
+            </section>
+        </section>

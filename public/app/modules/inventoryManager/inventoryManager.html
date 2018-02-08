@@ -1,0 +1,1849 @@
+﻿<style>
+    .cathead {
+        padding: 8px !important;
+        height:100% !important;
+    }
+        .cathead h4 {
+            margin-top: 0px !important;
+        }
+        .catheadicon {
+            margin:0px !important;
+            padding:4px !important; 
+            display:inline-block !important;
+        }
+        .catheadicon a{
+            margin-left:4px !important;
+        }
+        .catheadicon i {
+            font-size:12px !important;
+        }
+</style>
+<section id="main" ng-class="{ingreactive:ingredientListActive,'sides-active':sidesListActive,'production-active':productionListActive}">
+
+    <!-- Header-->
+    <section class="container" translate-namespace="EMPLOYEEPROFILE">
+        <div class="row route-bar">
+            <div class="col-md-12">
+                <div class="page-header text-center">
+                    <h1>
+                        {{ 'INVENTORY' | translate }}
+                    </h1>
+
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Main product display-->
+    <section class="container inventory-wrapper">
+	    
+	    
+
+        <div class="row products-results" style="height:auto">
+	        <div ng-if="!allCategory" class="list-loader">
+					                <i class="material-icons">adjust</i>
+				                </div>
+
+            <div class="col-md-3 col-lg-2 col-xs-12" ng-repeat="cate in allCategory">
+                <div class="panel panel-default product-category" >
+                    <!-- Category header -->
+                    <div ng-click="!cate.editedMod1 && getProductdetail($index,$index)" class="panel-heading cathead">
+                        <h4 ng-if="!ParentCategory">
+                            <span ng-show="!cate.editedMod1"> {{cate.Name}}</span>
+                            <a ng-show="cate.editedMod" href="javascript:void(0)" class="btn btn-raised btn-sm btn-xs btn-info catheadicon" ng-click="editCat(1)" >
+                                <i class="material-icons" >edit</i>
+                            </a>
+                            <a ng-show="cate.editedMod" href="javascript:void(0)" class="btn btn-raised btn-xs btn-danger catheadicon" ng-click="deleteCateory(cate, 'c')">
+                                <i class="material-icons" >delete</i>
+                            </a>
+
+
+                            <input type="text" ng-show="cate.editedMod1" ng-model="categoryName1.Name" style="color: black;width:100%" />
+                            <a ng-show="cate.editedMod1" href="javascript:void(0)" class="btn pull-right btn-raised btn-xs btn-danger catheadicon" ng-click="editCat(2)">
+                                <i class="material-icons" >close</i>
+                            </a>
+                            <a ng-show="cate.editedMod1" href="javascript:void(0)" class="btn btn-raised pull-right btn-xs btn-info catheadicon" ng-click="updateCategory()">
+                                <i class="material-icons" >done</i>
+                            </a>
+                        </h4>
+                    </div>
+
+                    <!-- product image-->
+                    <!--<img src="https://developers.google.com/maps/images/lhimages/api/icon_geocoding.svg" alt="" ng-click="getProductdetail(cate,$index)">-->
+                    <img ng-src="{{cate.headerimg}}" alt="" ng-click="getProductdetail($index,$index)" >
+
+
+
+                </div>
+            </div>
+        </div>
+		
+
+        <div class="row panel panel-default products-results">
+	        <div ng-if="!showProduct" class="list-loader">
+					                <i class="material-icons">adjust</i>
+				                </div>
+	        
+
+            <div class="col-md-3 col-lg-2 col-xs-12" ng-repeat="cate in allCategory">
+
+
+
+                <div class="product-category active">
+                   
+
+                    <div class="category-content" style="padding-top: 0px;">
+                        <div class="row">
+                            <div class="col-md-1 invisible-scrollbar" drag-scroll axis="y">
+
+                                <div class="row">
+                                    <!--<a href="javascript:void(0)" style="font-size: 12px;width: 30px;min-width: 30px;height: 30px;" class="btn btn-success btn-xs" >Add </a>-->
+                                    <!--{{cate}}-->
+                                    <button class="btn btn-success new-cat1" style="color: white;background-color: #09a4ea;" ng-click="opensubCategory(cate)"><i class="material-icons">add</i> </button>
+                                    <!--<button class="btn btn-info new-cat1" ng-click="opensubCategory(cate)"><i class="material-icons">view_module</i> <span class="hidden-xs">Add Subcategory</span></button>-->
+                                </div>
+
+                                <div class="row" ng-repeat="subcat1 in showSubCategory">
+                                    <button id="{{subcat1.NameSpace}}" class="btn btn-success new-cat1" ng-click="getProductdetailBySubcateId(subcat1,$index)"><span>{{subcat1.Name}}</span>
+                                        <a href="javascript:void(0)" class="btn btn-raised btn-xs btn-danger" ng-click="deleteCateory(subcat1, 's')">
+                                            <i class="material-icons" style="font-size:16px;">delete</i>
+                                        </a>
+                                    </button>
+                                </div>
+
+                            </div>
+
+                            <div class="col-md-11">
+	                            
+                                <!-- product list-->
+                                <div class="row category-results" ng-show="showProduct.length>0" drag-scroll axis="y">
+                                    <div class="col-md-4 col-xs-12" ng-repeat="pr in showProduct" ng-if="pr.isactive != 0;">
+                                        <div class="panel panel-default product-panel" style="background-image: url({{pr.image}});" ng-click="editProduct(pr)">
+                                            <h3>{{pr.Name}}</h3>
+                                         
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <!-- no product-->
+                                <div class="row category-results" ng-show="showProduct.length==0">
+                                    <div class="col-xs-12" style="text-align:center">
+                                        <div class="panel panel-default product-panel">
+                                            <h3>{{ 'NOPRODUCT' | translate }}</h3>
+
+                                        </div>
+                                    </div>
+
+
+                                </div>
+
+                            </div>
+                        </div>
+
+                    </div>
+
+                </div>
+            </div>
+        </div>
+
+
+    </section>
+
+    <!-- Ingredeinet left side div-->
+    <section class="container ingredients-wrap" ng-swipe-right="ingredientListDisable()">
+        <div class="row">
+            <div class="col-xs-12 ingr-header">
+                <h3>{{ 'INGREDIENTSMERMA' | translate }}</h3>
+                <button class="btn ingr-close btn-sm" ng-click="ingredientListDisable()"><i class="material-icons">clear</i></button>
+                <div class="form-group">
+                    <div class="input-group">
+                        <input id="searchinput" name="searchinput" type="search" placeholder="{{ 'SEARCH' | translate }}" class="form-control input-md" ng-model="search">
+
+                    </div>
+                </div>
+
+
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-xs-12 ingr-list-container" drag-scroll axis="y">
+                <div class="ingr-list">
+                    <div class="ingr-list-item row" ng-repeat="i in allIngedients | orderBy:'Name' |filter:search" ng-if="i.isactive != 0;">
+                        <div class="col-xs-4">
+                            <h5>{{i.Name}}</h5>
+                        </div>
+                        <div class="col-xs-4 text-center">
+                            <span>{{(i.Quantity).toFixed(2)}} {{i.UnitType}}</span>
+                        </div>
+                        <div class="col-xs-4 text-right">
+                            <button class="btn btn-info btn-raised" ng-click="editIngr(i)"><i class="material-icons">edit</i></button>
+                        </div>
+                    </div>
+                    <div class="ingr-list-item row" style="height: 100px;text-align: center;margin-top: 20px;" ng-if="allIngedients.length==0">
+
+                        <h5 style="margin-top: 45px;">{{ 'THEREARENOINGREDIENTS' | translate }}</h5>
+
+
+
+                    </div>
+
+                  
+                </div>
+            </div>
+        </div>
+        <div class="row ingr-control">
+            <div class="col-xs-12">
+                <button class="btn btn-info btn-raised" ng-click="addIngr()">{{ 'ADDNEWINGREDIENT' | translate }}</button>
+            </div>
+        </div>
+    </section>
+
+    <button class="btn btn-info ingr-activate btn-raised" ng-click="ingredientListActivate()"><i class="material-icons">view_module</i> <span class="hidden-xs">{{ 'INGREDIENTS' | translate }}</span></button>
+
+    <!-- side left side div-->
+    <section class="container sides-wrap" ng-swipe-right="sidesListDisable()">
+        <div class="row">
+            <div class="col-xs-12 sides-header">
+                <h3>{{ 'SIDESMANAGER' | translate }}</h3>
+                <button class="btn ingr-close btn-sm" ng-click="sidesListDisable()"><i class="material-icons">clear</i></button>
+                <div class="form-group">
+                    <div class="input-group">
+                        <input id="searchinput" ng-model="search" name="searchinput" type="search" placeholder="{{ 'SEARCH' | translate }}" class="form-control input-md">
+
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-xs-12 sides-list-container" drag-scroll axis="y">
+                <div class="sides-list">
+                    <div class="sides-list-item row" ng-repeat="side in allSides| orderBy:'Name'|filter:search" ng-show="side.isactive != 0;">
+                        <div class="col-xs-8">
+                            <h5>{{side.Name}}</h5>
+                        </div>
+                        <div class="col-xs-4 text-right">
+                            <button class="btn btn-warning btn-raised" ng-click="editSide(side)"><i class="material-icons">edit</i></button>
+                        </div>
+                    </div>
+                    <div class="sides-list-item row" ng-show="allSides.length== 0;">
+                        <div class="col-xs-12" style="text-align:center">
+                            <h5>{{ 'THEREARENOSIDES' | translate }}</h5>
+                        </div>
+
+                    </div>
+                    <!--<div class="sides-list-item row">
+                        <div class="col-xs-8">
+                            <h5>Side title</h5>
+                        </div>
+                        <div class="col-xs-4 text-right">
+                            <button class="btn btn-warning btn-raised" ng-click="editSide()"><i class="material-icons">edit</i></button>
+                        </div>
+                    </div>
+                    <div class="sides-list-item row">
+                        <div class="col-xs-8">
+                            <h5>Side title</h5>
+                        </div>
+                        <div class="col-xs-4 text-right">
+                            <button class="btn btn-warning btn-raised" ng-click="editSide()"><i class="material-icons">edit</i></button>
+                        </div>
+                    </div>
+                    <div class="sides-list-item row">
+                        <div class="col-xs-8">
+                            <h5>Side title</h5>
+                        </div>
+                        <div class="col-xs-4 text-right">
+                            <button class="btn btn-warning btn-raised" ng-click="editSide()"><i class="material-icons">edit</i></button>
+                        </div>
+                    </div>
+                    <div class="sides-list-item row">
+                        <div class="col-xs-8">
+                            <h5>Side title</h5>
+                        </div>
+                        <div class="col-xs-4 text-right">
+                            <button class="btn btn-warning btn-raised" ng-click="editSide()"><i class="material-icons">edit</i></button>
+                        </div>
+                    </div>-->
+                </div>
+            </div>
+        </div>
+        <div class="row sides-control">
+            <div class="col-xs-12">
+                <button class="btn btn-warning btn-raised" ng-click="addSide()">{{ 'ADDNEWSIDE' | translate }}</button>
+            </div>
+        </div>
+    </section>
+
+    <button class="btn btn-warning sides-activate btn-raised" ng-click="sidesListActivate()"><i class="material-icons">fiber_smart_record</i> <span class="hidden-xs">{{ 'SIDES' | translate }}</span></button>
+    
+     <!-- Production left side div-->
+    <section class="container production-wrap" ng-swipe-right="productionListDisable()">
+        <div class="row">
+            <div class="col-xs-12 production-header">
+                <h3>{{ 'PRODUCTIONMANAGER' | translate }}</h3>
+                <button class="btn ingr-close btn-sm" ng-click="productionListDisable()"><i class="material-icons">clear</i></button>
+                <div class="form-group">
+                    <div class="input-group">
+                        <input id="searchinput" ng-model="search" name="searchinput" type="search" placeholder="{{ 'SEARCH' | translate }}" class="form-control input-md">
+
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-xs-12 production-list-container" drag-scroll axis="y">
+                <div class="production-list">
+	                
+	                <!--<div class="production-list-item row">
+                        <div class="col-xs-3">
+                            <h5>Bean Soup </h5>
+                        </div>
+                        <div class="col-xs-3 text-center">
+                            <span>25.00 Grams</span>
+                        </div>
+                        <div class="col-xs-6 text-right">
+	                        <button class="btn btn-primary btn-raised"><i class="material-icons">add</i></button>
+							 <button class="btn btn-danger btn-raised"><i class="material-icons">delete</i></button>
+	                         <button class="btn btn-warning btn-raised" ng-click="editProduction()"><i class="material-icons">edit</i></button>
+                        </div>
+                    </div>-->
+                    <div class="production-list-item row" ng-repeat="prod in allProduction| orderBy:'Name'|filter:search" 
+                         ng-show="prod.isactive != 0;">
+                        <div class="col-xs-3">
+                            <h5>{{prod.Name}}</h5>
+                        </div>
+                        <div class="col-xs-3 text-center">
+                            <span>{{prod.AvailableQuantity}} {{prod.ProductionUnit}}</span>
+                        </div>
+                         <div class="col-xs-6 text-right">
+	                         <button class="btn btn-primary btn-raised" ng-click="IncrementProduction(prod)"><i class="material-icons">add</i></button>
+							 <button class="btn btn-danger btn-raised"  ng-click="RemoveProduction(prod)"><i class="material-icons">delete</i></button>
+	                         <button class="btn btn-warning btn-raised" ng-click="editProduction(prod)"><i class="material-icons">edit</i></button>
+	                         
+                        </div>
+                    </div>
+                    <div class="production-list-item row" ng-show="allProduction.length== 0;">
+                        <div class="col-xs-12" style="text-align:center">
+                            <h5>{{ 'THEREARENOITEMS' | translate }}</h5>
+                        </div>
+
+                    </div>
+             <!--       <div class="production-list-item row" ng-repeat="side in allSides| orderBy:'Name'|filter:search" ng-show="side.isactive != 0;">
+                        <div class="col-xs-8">
+                            <h5>{{side.Name}}</h5>
+                        </div>
+                        <div class="col-xs-4 text-right">
+                            <button class="btn btn-warning btn-raised" ng-click="editSide(side)"><i class="material-icons">edit</i></button>
+                        </div>
+                    </div>
+                    <div class="production-list-item row" ng-show="allSides.length== 0;">
+                        <div class="col-xs-12" style="text-align:center">
+                            <h5>{{ 'THEREARENOITEMS' | translate }}</h5>
+                        </div>
+
+                    </div>-->
+                  
+                </div>
+            </div>
+        </div>
+        <div class="row production-control">
+            <div class="col-xs-12">
+                <button class="btn btn-danger btn-raised" ng-click="addProduction()">{{ 'ADDNEWPRODUCTION' | translate }}</button>
+            </div>
+        </div>
+    </section>
+
+    <button class="btn btn-danger production-activate btn-raised" ng-click="productionListActivate()"><i class="material-icons">move_to_inbox</i> <span class="hidden-xs">{{ 'PRODUCTION' | translate }}</span></button>
+
+    <button class="btn btn-success new-cat" data-toggle="modal" data-target="#categAdd"><span>{{ 'ADDCATEGOY' | translate }}</span></button>
+
+    <button class="btn btn-primary btn-fab new-prod" ng-click="addProductInit()">{{ 'ADDITEM' | translate }}</button>
+
+</section>
+
+<div class="product-flow-container bg-primary" ng-show="addProductActive">
+    <div class="product-flow-header">
+        <div class="container">
+            <div class="row">
+                <div class="col-xs-12">
+                    <h3>{{ 'ADDNEWPRODUCT' | translate }} <small ng-show="flowStatus === '1'">{{ 'TYPE' | translate }} </small> <small ng-show="flowStatus === '2'">Info</small>  <small ng-show="flowStatus === '3'">{{ 'RECIPE' | translate }}</small>  <small ng-show="flowStatus === '4'">{{ 'VARIATIONS' | translate }}</small></h3>
+                </div>
+            </div>
+        </div>
+
+    </div>
+    <div class="product-flow-viewport">
+        <div class="product-flow-step step-one" ng-show="flowStatus === '1'">
+            <div class="container">
+                <div class="row">
+                    <div class="col-xs-12">
+                        <p class="lead">{{ 'WHATTYPEOFITEMAREYOUADDING' | translate }}</p>
+
+                        <div class="input-group product-type-select">
+                            <div class="btn-group radioBtn">
+                                <a class="btn btn-primary btn-sm active" data-toggle="happy" data-title="true" ng-click="prodTypeT();nextNewProd()">{{ 'PRODUCT' | translate }}</a>
+                                <a class="btn btn-primary btn-sm notActive" data-toggle="happy" data-title="false" ng-click="prodTypeF();nextNewProd()">{{ 'RETAIL' | translate }}</a>
+                            </div>
+                            <input type="hidden" name="happy" id="happy" ng-model="addProductType">
+                        </div>
+
+
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="product-flow-step step-two" ng-show="flowStatus === '2'">
+            <div class="container">
+                <div class="row">
+                    <div class="col-xs-12 col-md-offset-2 col-md-8">
+                        <div class="form-product" ng-show="addProductType">
+                            <p class="lead">{{ 'ENTERPRODUCTINFO' | translate }}</p>
+                            <!-- Text input-->
+                            <div class="form-group">
+                                <label class="col-md-12 control-label" for="textinput">{{ 'PRODUCTNAME' | translate }}</label>
+                                <div class="col-md-12">
+                                    <input id="textinput" name="textinput" type="text" placeholder="" class="form-control input-md" ng-model="Product.Name">
+
+                                </div>
+                            </div>
+
+                            <!-- Select Basic -->
+                            <div class="form-group">
+                                <label class="col-md-12 control-label" for="selectbasic">{{ 'CATEGORY' | translate }}</label>
+                                <div class="col-md-12">
+                                    <select id="selectbasic" name="selectbasic" class="form-control" ng-change="selectedCate()" ng-model="selectCategory" ng-options="item as item.Name for item in allCategory"></select>
+
+                                    <!--<select id="selectbasic" name="selectbasic" class="form-control">
+                                      <option value="1">Option one</option>
+                                      <option value="2">Option two</option>
+                                    </select>-->
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label class="col-md-12 control-label" for="selectbasic">{{ 'SUBCATEGORY' | translate }}</label>
+                                <div class="col-md-12">
+                                    <select id="selectbasic" name="selectbasic" class="form-control" ng-model="selectSubCategory" ng-options="item as item.Name for item in showSubCategory"></select>
+                                </div>
+                            </div>
+                            <!-- Text input-->
+                            <div class="form-group">
+                                <label class="col-md-12 control-label" for="textinput">{{ 'PRODUCTSALEPRICE' | translate }}</label>
+                                <div class="col-md-12">
+                                    <input id="textinput" name="textinput" type="number" placeholder="" class="form-control input-md" ng-model="Product.Price">
+
+                                </div>
+                            </div>
+                            <!-- Order Type -->
+                            
+                            <div class="form-group">
+				                <label class="col-md-2 control-label">{{ 'ORDERTYPE' | translate }}
+				                </label>
+				
+				                <div class="col-md-10 order-type">
+				                  <div class="radio radio-primary">
+				                    <label>
+				                      <input type="radio" name="optionsRadios" id="optionsRadios1" value="A" checked="" ng-model="ordergroup"><span class="circle"></span><span class="check"></span>
+				                      {{ 'ORDERA' | translate }}
+				                    </label>
+				                  </div>
+				                  <div class="radio radio-primary">
+				                    <label>
+				                      <input type="radio" name="optionsRadios" id="optionsRadios2" value="B" ng-model="ordergroup"><span class="circle"></span><span class="check"></span>
+				                      {{ 'ORDERB' | translate }}
+				                    </label>
+				                  </div>
+				                  
+				                  <p class="help-block">{{ 'ORDERTYPEINSTRUC' | translate }}</p>
+				                </div>
+				                
+				              </div>
+                            
+                            
+                            <br><br>
+                            <!-- File Button -->
+                            <div class="form-group">
+                                <div class="col-md-12">
+                                    <input type="file" id="inputFile4" multiple="">
+                                    <div class="input-group" style="margin-top: 24px">
+                                        <input type="text" readonly="" class="form-control" placeholder="{{ 'SELECTANIMAGE' | translate }}">
+                                        <span class="input-group-btn input-group-sm">
+                                            <button type="button" class="btn btn-fab btn-fab-mini">
+                                                <i class="material-icons">attach_file</i>
+                                            </button>
+                                        </span>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="clearfix"></div>
+                        </div>
+                        <div class="form-retail" ng-hide="addProductType">
+                            <p class="lead">{{ 'ENTERPRODUCTINFO' | translate }}</p>
+                            <!-- Text input-->
+                            <div class="form-group">
+                                <label class="col-md-12 control-label" for="textinput">{{ 'PRODUCTNAME' | translate }}</label>
+                                <div class="col-md-12">
+                                    <input id="textinput" name="textinput" type="text" placeholder="" class="form-control input-md" ng-model="Product.Name">
+
+                                </div>
+                            </div>
+
+                            <!-- Select Basic -->
+                            <div class="form-group">
+                                <label class="col-md-12 control-label" for="selectbasic">{{ 'CATEGORY' | translate }}</label>
+                                <div class="col-md-12">
+                                    <select id="selectbasic" name="selectbasic" class="form-control" ng-change="selectedCate()" ng-model="selectCategory" ng-options="item as item.Name for item in allCategory"></select>
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label class="col-md-12 control-label" for="selectbasic">{{ 'SUBCATEGORY' | translate }}</label>
+                                <div class="col-md-12">
+                                    <select id="selectbasic" name="selectbasic" class="form-control" ng-model="selectSubCategory" ng-options="item as item.Name for item in showSubCategory"></select>
+                                </div>
+                            </div>
+                            
+                            <!-- Text input-->
+                            <div class="form-group">
+                                <label class="col-md-12 control-label" for="textinput">{{ 'PRODUCTCOST' | translate }}</label>
+                                <div class="col-md-12">
+                                    <input id="textinput" name="textinput" type="text" placeholder="" class="form-control input-md" ng-model="Product.Costs">
+
+                                </div>
+                            </div>
+
+                            <!-- Text input-->
+                            <div class="form-group">
+                                <label class="col-md-12 control-label" for="textinput">{{ 'PRODUCTSALEPRICE' | translate }}</label>
+                                <div class="col-md-12">
+                                    <input id="textinput" name="textinput" type="text" placeholder="" class="form-control input-md" ng-model="Product.Price">
+
+                                </div>
+                            </div>
+                            
+                             <!-- Order Type -->
+                            
+                            <div class="form-group">
+				                <label class="col-md-2 control-label">{{ 'ORDERTYPE' | translate }}
+				                </label>
+				
+				                <div class="col-md-10 order-type">
+				                  <div class="radio radio-primary">
+				                    <label>
+				                      <input type="radio" name="optionsRadiosA" id="optionsRadios3" value="A" ng-model="ordergroup" checked=""><span class="circle"></span><span class="check"></span>
+				                      {{ 'ORDERA' | translate }}
+				                    </label>
+				                  </div>
+				                  <div class="radio radio-primary">
+				                    <label>
+				                      <input type="radio" name="optionsRadiosB" id="optionsRadios4" value="B" ng-model="ordergroup"><span class="circle"></span><span class="check"></span>
+				                      {{ 'ORDERB' | translate }}
+				                    </label>
+				                  </div>
+				                  
+				                  <p class="help-block">{{ 'ORDERTYPEINSTRUC' | translate }}</p>
+				                </div>
+				                
+				              </div>
+                            <br><br>
+                            <!-- File Button -->
+                            <div class="form-group">
+                                <div class="col-md-12">
+                                    <input type="file" id="inputFile5" multiple="">
+                                    <div class="input-group" style="margin-top: 24px">
+                                        <input type="text" readonly="" class="form-control" placeholder="{{ 'SELECTANIMAGE' | translate }}">
+                                        <span class="input-group-btn input-group-sm">
+                                            <button type="button" class="btn btn-fab btn-fab-mini">
+                                                <i class="material-icons">attach_file</i>
+                                            </button>
+                                        </span>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- Text input-->
+                            <div class="form-group">
+                                <label class="col-md-12 control-label" for="textinput">{{ 'INITIALQUANTITY' | translate }}</label>
+                                <div class="col-md-12">
+                                    <input id="textinput" name="textinput" type="text" placeholder="" class="form-control input-md" ng-model="Product.Quantity">
+
+                                </div>
+                            </div>
+                            <div class="clearfix"></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="product-flow-step step-tree" ng-show="flowStatus === '3'">
+            <div class="container">
+                <div class="row">
+                    <div class="col-xs-12 col-md-offset-2 col-md-8">
+                        <p class="lead">{{ 'ADDPRODUCTSINGREDIENTSANDSIDES' | translate }}</p>
+                        <div class="ingredient-search-module">
+                            <div class="ui-widget ingredient-search-control container-fluid">
+                                <div class="row">
+                                    <div class="col-xs-12">
+                                        <label>{{ 'INGREDIENTS' | translate }}</label>
+                                    </div>
+                                    <div class="col-xs-12 col-sm-6">
+                                        <autocomplete attr-inputclass="form-control" attr-placeholder="{{ 'SEARCH' | translate }} {{ 'INGREDIENTS' | translate }}" ng-model="selecctIngredients" data="allIngedientsName" on-select="onAddExtraIngredients"></autocomplete>
+                                        <!--<select ng-model="addIngredientTitle" ng-options="item as item.Name for item in allIngedients"></select>-->
+
+                                    </div>
+                                    <div class="col-xs-5 col-sm-3">
+                                        <input type="number" min="0" step="any" class="form-control" placeholder="Quantity" ng-model="addIngredientQuantity">
+
+                                    </div>
+                                    <div class="col-xs-2 col-sm-1">
+                                        <select class="form-control" id="id1" ng-model="toUnit" ng-options="Units.short for Units in UnitsForConverts">
+                                            <!--<option ng-bind="shortForm(addIngredientTitle.UnitType)" value="shortForm(addIngredientTitle.UnitType)"></option>-->
+                                        </select>
+                                        <!--<span ng-bind="shortForm(addIngredientTitle.UnitType)">.</span>-->
+                                    </div>
+                                    <div class="col-xs-5 col-sm-2">
+                                        <button class="btn btn-warning" ng-click="addIngredientTOproduct()">{{ 'ADD' | translate }} </button>
+                                    </div>
+                                </div>
+                            </div>
+                            <hr />
+                            <ul class="list-group ingredient-search-container">
+                                <li class="list-group-item row" ng-repeat="i in addSlideIngredient">
+                                    <div class="col-xs-5"><strong>{{getIngName(i)}}</strong></div>
+                                    <div class="col-xs-4 text-center"><span>{{i.quantity}} <span ng-bind="shortForm(i.name.UnitType)"></span></span></div>
+                                    <div class="col-xs-3"><a href="javascript:void(0)" class="btn btn-raised btn-danger btn-xs pull-right" ng-click="removeIngredientFrmproduct(i)"><i class="material-icons">clear</i></a></div>
+                                </li>
+                                <li class="list-group-item row" ng-show="addSlideIngredient.length==0">
+                                    <div style="text-align: center;"><strong> {{ 'NOINGREDIENTSTOADD' | translate }}</strong></div>
+                                </li>
+
+                            </ul>
+                        </div>
+                        <div class="ingredient-search-module sides-module">
+                            <div class="ui-widget ingredient-search-control container-fluid">
+                                <div class="row">
+                                    <div class="col-xs-12">
+                                        <label>{{ 'SIDES' | translate }}</label>
+                                    </div>
+                                    <div class="col-xs-12 col-sm-10">
+                                        <autocomplete attr-inputclass="form-control" attr-placeholder="{{ 'SEARCH' | translate }} {{ 'SIDES' | translate }}" ng-model="selecctIngredients1" data="allSidesName" on-select="onSearchSides"></autocomplete>
+                                        <!--<select ng-model="addSideTitle" ng-options="item as item.Name for item in allSides"></select>-->
+                                    </div>
+
+                                    <div class="col-xs-12 col-sm-2">
+                                        <button class="btn btn-warning" ng-click="addSideTOproduct()">{{ 'ADD' | translate }}</button>
+                                    </div>
+                                </div>
+                            </div>
+                            <hr />
+                            <ul class="list-group ingredient-search-container">
+                                <li class="list-group-item row" ng-repeat="i in addProductSlide track by $index">
+                                    <div class="col-xs-5"><strong>{{getSideName(i)}}</strong></div>
+                                    <div class="col-xs-4 text-center"></div>
+                                    <div class="col-xs-3"><a href="javascript:void(0)" class="btn btn-raised btn-danger btn-xs pull-right" ng-click="removeSideFrmproduct(i)"><i class="material-icons">clear</i></a></div>
+                                </li>
+                                <li class="list-group-item row" ng-show="addProductSlide.length==0">
+                                    <div style="text-align: center;"><strong>{{ 'NOSIDESTOADD' | translate }}</strong></div>
+                                </li>
+                                <!--<li class="list-group-item row">
+                                      <div class="col-xs-5"><strong>Side name</strong></div>
+                                      <div class="col-xs-4 text-center"></div>
+                                      <div class="col-xs-3"><a href="javascript:void(0)" class="btn btn-raised btn-danger btn-xs pull-right"><i class="material-icons">clear</i></a></div>
+                                </li>
+                                <li class="list-group-item row">
+                                      <div class="col-xs-5"><strong>Side name</strong></div>
+                                      <div class="col-xs-4 text-center"></div>
+                                      <div class="col-xs-3"><a href="javascript:void(0)" class="btn btn-raised btn-danger btn-xs pull-right"><i class="material-icons">clear</i></a></div>
+                                </li>-->
+                            </ul>
+                        </div>
+                        <div class="ingredient-search-module">
+                            <div class="ui-widget ingredient-search-control container-fluid">
+                                <div class="row">
+                                    <div class="col-xs-12">
+                                        <label>Production</label>
+                                    </div>
+                                    <div class="col-xs-12 col-sm-6">
+                                        <autocomplete attr-inputclass="form-control" attr-placeholder="{{ 'SEARCH' | translate }} Production" ng-model="selectProduction" data="allProductionName" on-select="onAddExtraProduction"></autocomplete>
+                                        <!--<select ng-model="addIngredientTitle" ng-options="item as item.Name for item in allIngedients"></select>-->
+
+                                    </div>
+                                    <div class="col-xs-5 col-sm-3">
+                                        <input type="number" min="0" step="any" class="form-control" placeholder="Quantity" ng-model="addProductionQuantity">
+
+                                    </div>
+                                    <div class="col-xs-2 col-sm-1">
+                                        <select class="form-control" id="id1" ng-model="PtoUnit" ng-options="Units.short for Units in PUnitsForConverts">
+                                            <!--<option ng-bind="shortForm(addIngredientTitle.UnitType)" value="shortForm(addIngredientTitle.UnitType)"></option>-->
+                                        </select>
+                                        <!--<span ng-bind="shortForm(addProductionTitle.ProductionUnit)">.</span>-->
+                                    </div>
+                                    <div class="col-xs-5 col-sm-2">
+                                        <button class="btn btn-warning" ng-click="addProductionTOproduct()">{{ 'ADD' | translate }} </button>
+                                    </div>
+                                </div>
+                            </div>
+                            <hr />
+                            <ul class="list-group ingredient-search-container">
+                                <li class="list-group-item row" ng-repeat="i in addProductProduction">
+                                    <div class="col-xs-5"><strong>{{getIngName(i)}}</strong></div>
+                                    <div class="col-xs-4 text-center"><span>{{i.quantity}} <span ng-bind="shortForm(i.name.ProductionUnit)"></span></span></div>
+                                    <div class="col-xs-3"><a href="javascript:void(0)" class="btn btn-raised btn-danger btn-xs pull-right" ng-click="removeProductionFrmproduct(i)"><i class="material-icons">clear</i></a></div>
+                                </li>
+                                <li class="list-group-item row" ng-show="addProductProduction.length==0">
+                                    <div style="text-align: center;"><strong> {{ 'NOPRODUCTIONTOADD' | translate }}</strong></div>
+                                </li>
+
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="product-flow-step step-four" ng-show="flowStatus === '4'">
+            <div class="container">
+                <div class="row">
+                    <div class="col-xs-12 col-md-offset-2 col-md-8">
+                        <p class="lead">{{ 'ADDSPRODUCTSVARIATIONS' | translate }}</p>
+                        <input type="text" min="0" step="any" class="form-control" placeholder="Variation" ng-model="addVariationTitle">
+                        <ul class="list-group ingredient-search-container variations-list">
+
+                            <li class="list-group-item row" ng-repeat="i in addProductVariation track by $index">
+                                <div class="col-xs-5"><strong>{{i.Name}}</strong></div>
+                                <div class="col-xs-4 text-center"></div>
+                                <div class="col-xs-3"><a href="javascript:void(0)" class="btn btn-raised btn-danger btn-xs pull-right" ng-click="removevariationFrmproduct(i)"><i class="material-icons">clear</i></a></div>
+                            </li>
+                            <li class="list-group-item row" ng-show="addProductVariation.length==0">
+                                <div style="text-align: center;"><strong>{{ 'NOVARIATIONSTOADD' | translate }}</strong></div>
+                            </li>
+                            <!--<li class="list-group-item row">
+                                  <div class="col-xs-5"><strong>Variation 1</strong></div>
+                                  <div class="col-xs-4 text-center"></div>
+                                  <div class="col-xs-3"><a href="javascript:void(0)" class="btn btn-raised btn-danger btn-xs pull-right"><i class="material-icons">clear</i></a></div>
+                            </li>
+                            <li class="list-group-item row">
+                                  <div class="col-xs-5"><strong>Variation 2 </strong></div>
+                                  <div class="col-xs-4 text-center"></div>
+                                  <div class="col-xs-3"><a href="javascript:void(0)" class="btn btn-raised btn-danger btn-xs pull-right"><i class="material-icons">clear</i></a></div>
+                            </li>
+                            <li class="list-group-item row">
+                                  <div class="col-xs-5"><strong>Variation 3</strong></div>
+                                  <div class="col-xs-4 text-center"></div>
+                                  <div class="col-xs-3"><a href="javascript:void(0)" class="btn btn-raised btn-danger btn-xs pull-right"><i class="material-icons">clear</i></a></div>
+                            </li>-->
+                        </ul>
+                        <a href="javascript:void(0)" style="width: 100%;" class="btn btn-raised btn-primary" ng-click="addVariationTOproduct()">{{ 'ADDVARIATIONS' | translate }}</a>
+
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="product-flow-control">
+        <div class="container-fluid">
+            <div class="row">
+                <div class="col-xs-4">
+                    <button class="btn btn-primary btn-sm" ng-click="backNewProd()" ng-disabled="flowStatus === '1'">{{ 'BACK' | translate }}</button>
+                </div>
+                <div class="col-xs-4">
+                    <button class="btn btn-danger btn-sm" ng-click="addProductcancel()">{{ 'CANCEL' | translate }}</button>
+                </div>
+                <div class="col-xs-4"  ng-hide="flowStatus === '1'">
+                    <button class="btn btn-success btn-sm" ng-click="nextNewProd()" ng-hide="!addProductType && flowStatus === '2' || flowStatus === '4'">{{ 'NEXT' | translate }}</button>
+
+                    <button class="btn btn-success btn-sm" ng-click="addProductEnd()" ng-show="!addProductType && flowStatus === '2' || flowStatus === '4'" ng-disabled="addNewPrud">{{ 'SAVEITEM' | translate }}</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+
+  
+
+
+
+</div>
+
+<!-- Modal -->
+
+
+<!-- Edit Product modal-->
+<div class="product-flow-container bg-primary" ng-show="editProductActive">
+    <div class="product-flow-header">
+        <div class="container">
+            <div class="row">
+                <div class="col-xs-12">
+                    <h3>{{Product.Name}} <small>{{ 'TYPE' | translate }} - {{Product.type}}  </small></h3>
+                </div>
+            </div>
+        </div>
+
+    </div>
+    <div class="product-flow-viewport">
+        <!--<div class="product-flow-step step-one">
+            <div class="container">
+                <div class="row">
+                    <div class="col-xs-12">
+                        <p class="lead">What type of item are you adding this time?</p>
+
+                        <div class="input-group product-type-select">
+                            <div class="btn-group radioBtn">
+                                <a class="btn btn-primary btn-sm active" data-toggle="happy" data-title="true" ng-click="prodTypeT()">Product</a>
+                                <a class="btn btn-primary btn-sm notActive" data-toggle="happy" data-title="false" ng-click="prodTypeF()">Retail</a>
+                            </div>
+                            <input type="hidden" name="happy" id="happy" ng-model="addProductType">
+                        </div>
+
+
+                    </div>
+                </div>
+            </div>
+        </div>-->
+        <div class="product-flow-step step-two">
+            <div class="container">
+                <div class="row">
+                    <div class="col-xs-12 col-md-offset-2 col-md-8">
+                        <div class="form-product" ng-show="addProductType">
+                            <p class="lead">{{ 'UPDATEPRODUCTDETAILANDQUANTITY' | translate }} </p>
+
+
+                            <div class="togglebutton text-center" ng-show="Product.type == 'Retail'">
+                                <label>
+                                    <span ng-class="{'text-danger':!modifyRetailProduct}">{{ 'REMOVE' | translate }}</span> &nbsp;&nbsp;
+                                    <input type="checkbox" ng-bind="modifyRetailProduct" ng-model="modifyRetailProduct" checked>
+                                    <span ng-class="{'text-success':modifyRetailProduct}">{{ 'ADD' | translate }}</span>
+
+                                </label>
+                                <span style="float: right;padding-right: 20px;font-size: 20px;color: #518ec2;">{{ 'CURRENTQUANTITY' | translate }} - {{Product.Quantity}}</span>
+                            </div>
+
+                            <div class="form-group label-floating input-group" ng-show="Product.type == 'Retail'">
+                                <span class="input-group-addon" ng-show="modifyRetailProduct">+</span>
+                                <span class="input-group-addon" ng-hide="modifyRetailProduct">-</span>
+                                <label class="control-label" for="focusedInput1Retail">{{ 'ENTERAMOUNTTOMODIFY' | translate }}</label>
+                                <input class="form-control" id="focusedInput1Retail" type="number" step="any" ng-model="editedRetailProductQuantity">
+                                <!--<span class="input-group-addon" ng-bind="shortForm(editIngredient.UnitType)">.</span>-->
+                            </div>
+
+
+
+                            <!-- Text input-->
+
+
+                            <div class="form-group">
+                                <label class="col-md-12 control-label" for="textinput">{{ 'PRODUCTNAME' | translate }}</label>
+                                <div class="col-md-12">
+                                    <input id="textinput" name="textinput" type="text" placeholder="" class="form-control input-md" ng-model="Product.Name">
+
+                                </div>
+                            </div>
+
+                            <!-- Select Basic -->
+                            <div class="form-group">
+                                <label class="col-md-12 control-label" for="selectbasic">{{ 'CATEGORY' | translate }}</label>
+                                <div class="col-md-12">
+                                    <select id="selectbasic2" name="selectbasic2" class="form-control" ng-change="selectedCate()"
+                                            required data-ng-model="selectCategory" ng-options="item as item.Name for item in allCategory">
+                                        <!--<option value="" selected="selected" ng-show="!checkUpdation">{{selectCategory.Name}}</option>-->
+
+                                    </select>
+
+                                    <!--<select id="selectbasic" name="selectbasic" class="form-control">
+                                      <option value="1">Option one</option>
+                                      <option value="2">Option two</option>
+                                    </select>-->
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label class="col-md-12 control-label" for="selectbasic">{{ 'SUBCATEGORY' | translate }}</label>
+                                <div class="col-md-12">
+                                    <select id="selectbasic1" name="selectbasic2" class="form-control" data-ng-model="selectSubCategory" required ng-options="item as item.Name for item in showSubCategory">
+                                        <!--<option value="" selected="selected" ng-show="!checkUpdation">{{selectSubCategory.Name}}</option>-->
+                                    </select>
+                                </div>
+                            </div>
+                            <!-- Text input-->
+                            <div class="form-group">
+                                <label class="col-md-12 control-label" for="textinput">{{ 'PRODUCTSALEPRICE' | translate }}</label>
+                                <div class="col-md-12">
+                                    <input id="textinput" name="textinput" type="number" placeholder="" class="form-control input-md" ng-model="Product.Price">
+
+                                </div>
+                            </div>
+                            
+                             <!-- Order Type -->
+                            
+                            <div class="form-group">
+				                <label class="col-md-2 control-label">{{ 'ORDERTYPE' | translate }}
+				                </label>
+				
+				                <div class="col-md-10 order-type">
+				                  <div class="radio radio-primary">
+				                    <label>
+				                      <input type="radio" name="optionsRadiosC" id="optionsRadios5" value="A" ng-model="ordergroup" checked=""><span class="circle"></span><span class="check"></span>
+				                      {{ 'ORDERA' | translate }}
+				                    </label>
+				                  </div>
+				                  <div class="radio radio-primary">
+				                    <label>
+				                      <input type="radio" name="optionsRadiosD" id="optionsRadios6" value="B" ng-model="ordergroup"><span class="circle"></span><span class="check"></span>
+				                      {{ 'ORDERB' | translate }}
+				                    </label>
+				                  </div>
+				                  
+				                  <p class="help-block">{{ 'ORDERTYPEINSTRUC' | translate }}</p>
+				                </div>
+				                
+				              </div>
+                            
+                            <br><br>
+                            <!-- File Button -->
+                            <div class="form-group">
+                                <div class="col-md-12">
+                                    <img ng-src="{{Product.image}}" style="max-height:250px" id="proimg">
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <div class="col-md-12">
+                                    <input type="file" id="inputFile" multiple="">
+                                    <div class="input-group" style="margin-top: 24px">
+                                        <!--<input type="text" readonly="" class="form-control" placeholder="Select an image...">-->
+                                        <span class="input-group-btn input-group-sm">
+                                            <button type="button" class="btn btn-primary" style="background-color: #337ab7;color: white;">
+                                               {{ 'CHANGEPRODUCTIMAGE' | translate }}
+                                            </button>
+                                        </span>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="clearfix"></div>
+                        </div>
+                        <div class="form-retail" ng-hide="addProductType">
+                            <p class="lead">{{ 'ENTERPRODUCTINFO' | translate }}</p>
+                            <!-- Text input-->
+
+                            <div class="form-group">
+                                <label class="col-md-12 control-label" for="textinput">{{ 'PRODUCTNAME' | translate }}</label>
+                                <div class="col-md-12">
+                                    <input id="textinput" name="textinput" type="text" placeholder="" class="form-control input-md" ng-model="Product.Name">
+
+                                </div>
+                            </div>
+
+
+
+                            <div class="form-group">
+                                <label class="col-md-12 control-label" for="textinput">{{ 'PRODUCTNAME' | translate }}</label>
+                                <div class="col-md-12">
+                                    <input id="textinput" name="textinput" type="text" placeholder="" class="form-control input-md" ng-model="Product.Name">
+
+                                </div>
+                            </div>
+
+                            <!-- Select Basic -->
+                            <div class="form-group">
+                                <label class="col-md-12 control-label" for="selectbasic">{{ 'CATEGORY' | translate }}</label>
+                                <div class="col-md-12">
+                                    <select id="selectbasic" name="selectbasic" class="form-control" ng-model="selectCategory" ng-options="item as item.Name for item in allCategory"></select>
+
+                                    <!--<select id="selectbasic" name="selectbasic" class="form-control">
+                                      <option value="1">Option one</option>
+                                      <option value="2">Option two</option>
+                                    </select>-->
+                                </div>
+                            </div>
+
+                            <!-- Text input-->
+                            <div class="form-group">
+                                <label class="col-md-12 control-label" for="textinput">{{ 'PRODUCTSALEPRICE' | translate }}</label>
+                                <div class="col-md-12">
+                                    <input id="textinput" name="textinput" type="text" placeholder="" class="form-control input-md" ng-model="Product.Price">
+
+                                </div>
+                            </div>
+                            
+                             <!-- Order Type -->
+                            
+                            <div class="form-group">
+				                <label class="col-md-2 control-label">{{ 'ORDERTYPE' | translate }}
+				                </label>
+				
+				                <div class="col-md-10 order-type">
+				                  <div class="radio radio-primary">
+				                    <label>
+				                      <input type="radio" name="optionsRadiosE" id="optionsRadios7" value="A" ng-model="ordergroup" checked=""><span class="circle"></span><span class="check"></span>
+				                      {{ 'ORDERA' | translate }}
+				                    </label>
+				                  </div>
+				                  <div class="radio radio-primary">
+				                    <label>
+				                      <input type="radio" name="optionsRadiosF" id="optionsRadios8" ng-model="ordergroup" value="B"><span class="circle"></span><span class="check"></span>
+				                      {{ 'ORDERB' | translate }}
+				                    </label>
+				                  </div>
+				                  
+				                  <p class="help-block">{{ 'ORDERTYPEINSTRUC' | translate }}</p>
+				                </div>
+				                
+				              </div>
+                            <br><br>
+                            <!-- File Button -->
+                            <div class="form-group">
+                                <div class="col-md-12">
+                                    <input type="file" id="inputFile4" multiple="">
+                                    <div class="input-group" style="margin-top: 24px">
+                                        <input type="text" readonly="" class="form-control" placeholder="{{ 'SELECTANIMAGE' | translate }}">
+                                        <span class="input-group-btn input-group-sm">
+                                            <button type="button" class="btn btn-fab btn-fab-mini">
+                                                <i class="material-icons">attach_file</i>
+                                            </button>
+                                        </span>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- Text input-->
+                            <div class="form-group">
+                                <label class="col-md-12 control-label" for="textinput">{{ 'INITIALQUANTITY' | translate }}</label>
+                                <div class="col-md-12">
+                                    <input id="textinput" name="textinput" type="text" placeholder="" class="form-control input-md" ng-model="Product.Quantity">
+
+                                </div>
+                            </div>
+                            <div class="clearfix"></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <br />
+        <div class="product-flow-step step-tree" ng-show="Product.type!='Retail'">
+            <div class="container">
+                <div class="row">
+                    <div class="col-xs-12 col-md-offset-2 col-md-8">
+                        <p class="lead">{{ 'ADDPRODUCTSINGREDIENTSANDSIDES' | translate }}</p>
+                        <div class="ingredient-search-module">
+                            <div class="ui-widget ingredient-search-control container-fluid">
+                                <div class="row">
+                                    <div class="col-xs-12">
+                                        <label>{{ 'INGREDIENTS' | translate }}</label>
+                                    </div>
+                                    <div class="col-xs-12 col-sm-6">
+                                        <autocomplete attr-inputclass="form-control" attr-placeholder="{{ 'SEARCH' | translate }} {{ 'INGREDIENTS' | translate }}" ng-model="selecctIngredients" data="allIngedientsName" on-select="onAddExtraIngredients"></autocomplete>
+                                        <!--<select ng-model="addIngredientTitle" ng-options="item as item.Name for item in allIngedients"></select>-->
+
+                                    </div>
+                                    <div class="col-xs-5 col-sm-3">
+                                        <input type="number" min="0" step="any" class="form-control" placeholder="Quantity" ng-model="addIngredientQuantity">
+
+                                    </div>
+                                    <div class="col-xs-2 col-sm-1">
+                                        <select class="form-control" id="id1" ng-model="toUnit" ng-options="Units.short for Units in UnitsForConverts">
+                                            <!--<option ng-bind="shortForm(addIngredientTitle.UnitType)" value="shortForm(addIngredientTitle.UnitType)"></option>-->
+                                        </select>
+
+                                        <!--<span ng-bind="shortForm(addIngredientTitle.UnitType)">.</span>-->
+                                    </div>
+                                    <div class="col-xs-5 col-sm-2">
+                                        <button class="btn btn-warning" ng-click="addIngredientTOproduct()">{{ 'ADD' | translate }} </button>
+                                    </div>
+                                </div>
+                            </div>
+                            <hr />
+                            <ul class="list-group ingredient-search-container">
+                                <li class="list-group-item row" ng-repeat="i in addSlideIngredient">
+                                    <div class="col-xs-5"><strong>{{ getIngName(i) }}</strong></div>
+                                    <div class="col-xs-4 text-center"><span>{{i.quantity}} <span ng-bind="shortForm(i.name.UnitType)"></span></span></div>
+                                    <div class="col-xs-3"><a href="javascript:void(0)" class="btn btn-raised btn-danger btn-xs pull-right" ng-click="removeIngredientFrmproduct(i)"><i class="material-icons">clear</i></a></div>
+                                </li>
+                                <li class="list-group-item row" ng-show="addSlideIngredient.length==0">
+                                    <div style="text-align: center;"><strong> {{ 'NOINGREDIENTSTOADD' | translate }}</strong></div>
+                                </li>
+
+                            </ul>
+                        </div>
+                        <div class="ingredient-search-module sides-module">
+                            <div class="ui-widget ingredient-search-control container-fluid">
+                                <div class="row">
+                                    <div class="col-xs-12">
+                                        <label>{{ 'SIDES' | translate }}</label>
+                                    </div>
+                                    <div class="col-xs-12 col-sm-10">
+                                        <autocomplete attr-inputclass="form-control" attr-placeholder="{{ 'SEARCH' | translate }} {{ 'SIDES' | translate }}" ng-model="selecctIngredients1" data="allSidesName" on-select="onSearchSides"></autocomplete>
+                                        <!--<select ng-model="addSideTitle" ng-options="item as item.Name for item in allSides"></select>-->
+                                    </div>
+
+                                    <div class="col-xs-12 col-sm-2">
+                                        <button class="btn btn-warning" ng-click="addSideTOproduct()">{{ 'ADD' | translate }}</button>
+                                    </div>
+                                </div>
+                            </div>
+                            <hr />
+                            <ul class="list-group ingredient-search-container">
+                                <li class="list-group-item row" ng-repeat="i in addProductSlide track by $index">
+                                    <div class="col-xs-5"><strong>{{getSideName(i)}}</strong></div>
+                                    <div class="col-xs-4 text-center"></div>
+                                    <div class="col-xs-3"><a href="javascript:void(0)" class="btn btn-raised btn-danger btn-xs pull-right" ng-click="removeSideFrmproduct(i)"><i class="material-icons">clear</i></a></div>
+                                </li>
+                                <li class="list-group-item row" ng-show="addProductSlide.length==0">
+                                    <div style="text-align: center;"><strong>{{ 'NOSIDESTOADD' | translate }}</strong></div>
+                                </li>
+                                <!--<li class="list-group-item row">
+                                      <div class="col-xs-5"><strong>Side name</strong></div>
+                                      <div class="col-xs-4 text-center"></div>
+                                      <div class="col-xs-3"><a href="javascript:void(0)" class="btn btn-raised btn-danger btn-xs pull-right"><i class="material-icons">clear</i></a></div>
+                                </li>
+                                <li class="list-group-item row">
+                                      <div class="col-xs-5"><strong>Side name</strong></div>
+                                      <div class="col-xs-4 text-center"></div>
+                                      <div class="col-xs-3"><a href="javascript:void(0)" class="btn btn-raised btn-danger btn-xs pull-right"><i class="material-icons">clear</i></a></div>
+                                </li>-->
+                            </ul>
+                        </div>
+                        <div class="ingredient-search-module">
+                            <div class="ui-widget ingredient-search-control container-fluid">
+                                <div class="row">
+                                    <div class="col-xs-12">
+                                        <label>Production</label>
+                                    </div>
+                                    <div class="col-xs-12 col-sm-6">
+                                        <autocomplete attr-inputclass="form-control" attr-placeholder="{{ 'SEARCH' | translate }} Production" ng-model="selectProduction" data="allProductionName" on-select="onAddExtraProduction"></autocomplete>
+                                        <!--<select ng-model="addIngredientTitle" ng-options="item as item.Name for item in allIngedients"></select>-->
+
+                                    </div>
+                                    <div class="col-xs-5 col-sm-3">
+                                        <input type="number" min="0" step="any" class="form-control" placeholder="Quantity" ng-model="addProductionQuantity">
+
+                                    </div>
+                                    <div class="col-xs-2 col-sm-1">
+                                        <select class="form-control" id="id2" ng-model="PtoUnit" ng-options="Units.short for Units in PUnitsForConverts">
+                                            <!--<option ng-bind="shortForm(addIngredientTitle.UnitType)" value="shortForm(addIngredientTitle.UnitType)"></option>-->
+                                        </select>
+
+                                        <!--<span ng-bind="shortForm(addProductionTitle.ProductionUnit)">.</span>-->
+                                    </div>
+                                    <div class="col-xs-5 col-sm-2">
+                                        <button class="btn btn-warning" ng-click="addProductionTOproduct()">{{ 'ADD' | translate }} </button>
+                                    </div>
+                                </div>
+                            </div>
+                            <hr />
+                            <ul class="list-group ingredient-search-container">
+                                <li class="list-group-item row" ng-repeat="i in addProductProduction">
+                                    <div class="col-xs-5"><strong>{{ getIngName(i) }}</strong></div>
+                                    <div class="col-xs-4 text-center"><span>{{i.quantity}} <span ng-bind="shortForm(i.name.ProductionUnit)"></span></span></div>
+                                    <div class="col-xs-3"><a href="javascript:void(0)" class="btn btn-raised btn-danger btn-xs pull-right" ng-click="removeProductionFrmproduct(i)"><i class="material-icons">clear</i></a></div>
+                                </li>
+                                <li class="list-group-item row" ng-show="addProductProduction.length==0">
+                                    <div style="text-align: center;"><strong> {{ 'NOPRODUCTIONTOADD' | translate }}</strong></div>
+                                </li>
+
+                            </ul>
+                        </div>
+                       
+                    </div>
+                </div>
+            </div>
+        </div>
+        <br />
+        <div class="product-flow-step step-four" ng-show="Product.type!='Retail'">
+            <div class="container">
+                <div class="row">
+                    <div class="col-xs-12 col-md-offset-2 col-md-8" >
+                        <p class="lead">{{ 'ADDSPRODUCTSVARIATIONS' | translate }}</p>
+                        <input type="text" min="0" step="any" class="form-control" placeholder="Variation" ng-model="addVariationTitle">
+                        <ul class="list-group ingredient-search-container variations-list">
+
+                            <li class="list-group-item row" ng-repeat="i in addProductVariation track by $index">
+                                <div class="col-xs-5"><strong>{{i.Name}}</strong></div>
+                                <div class="col-xs-4 text-center"></div>
+                                <div class="col-xs-3"><a href="javascript:void(0)" class="btn btn-raised btn-danger btn-xs pull-right" ng-click="removevariationFrmproduct(i)"><i class="material-icons">clear</i></a></div>
+                            </li>
+                            <li class="list-group-item row" ng-show="addProductVariation.length==0">
+                                <div style="text-align: center;"><strong> {{ 'NOVARIATIONSTOADD' | translate }}</strong></div>
+                            </li>
+                            <!--<li class="list-group-item row">
+                                  <div class="col-xs-5"><strong>Variation 1</strong></div>
+                                  <div class="col-xs-4 text-center"></div>
+                                  <div class="col-xs-3"><a href="javascript:void(0)" class="btn btn-raised btn-danger btn-xs pull-right"><i class="material-icons">clear</i></a></div>
+                            </li>
+                            <li class="list-group-item row">
+                                  <div class="col-xs-5"><strong>Variation 2 </strong></div>
+                                  <div class="col-xs-4 text-center"></div>
+                                  <div class="col-xs-3"><a href="javascript:void(0)" class="btn btn-raised btn-danger btn-xs pull-right"><i class="material-icons">clear</i></a></div>
+                            </li>
+                            <li class="list-group-item row">
+                                  <div class="col-xs-5"><strong>Variation 3</strong></div>
+                                  <div class="col-xs-4 text-center"></div>
+                                  <div class="col-xs-3"><a href="javascript:void(0)" class="btn btn-raised btn-danger btn-xs pull-right"><i class="material-icons">clear</i></a></div>
+                            </li>-->
+                        </ul>
+                        <a href="javascript:void(0)" style="width: 100%;" class="btn btn-raised btn-primary" ng-click="addVariationTOproduct()">{{ 'ADDVARIATIONS' | translate }}</a>
+
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="product-flow-control">
+            <div class="container-fluid">
+                <div class="row">
+                    <div class="col-xs-6">
+                    </div>
+                    <div class="col-xs-2">
+                        <button class="btn btn-danger btn-sm" ng-click="openProDeleteModal()">Delete</button>
+                    </div>
+                    <div class="col-xs-2">
+                        <button class="btn btn-danger btn-sm" ng-click="editProductCancle()">{{ 'CANCEL' | translate }}</button>
+                    </div>
+                    <div class="col-xs-2">
+                        <button class="btn btn-success btn-sm" ng-click="UpdateProduct()">{{ 'SAVECHANGES' | translate }}</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+</div>
+
+
+<div class="modal fade" id="categAdd" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                <h4 class="modal-title" id="myModalLabel">{{ 'ADDNEWCATEGORY' | translate }}</h4>
+            </div>
+            <div class="modal-body">
+                <div class="row">
+                    <div class="col-xs-12">
+                        <!-- Text input-->
+                        <div class="form-group">
+                            <label class="col-md-6 control-label" for="textinput">{{ 'ADDNEWCATEGORY' | translate }}</label>
+                            <div class="col-md-6">
+                                <input id="textinput" name="textinput" type="text" placeholder="Descriptive title" class="form-control input-md" ng-model="categoryName" required="">
+
+                            </div>
+                        </div>
+
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default" data-dismiss="modal">{{ 'CANCEL' | translate }}</button>
+                <button type="button" class="btn btn-primary" ng-click="createCategory()">{{ 'CREATECATEGORY' | translate }}</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="modal fade" id="subcategAdd" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                <h4 class="modal-title" id="myModalLabel">{{parentCate.Name}} {{ 'ADDSUBCATEGORY' | translate }} </h4>
+            </div>
+            <div class="modal-body">
+                <div class="row">
+                    <div class="col-xs-12">
+                        <!-- Text input-->
+                        <div class="form-group">
+                            <label class="col-md-6 control-label" for="textinput">{{ 'SUBCATEGORY' | translate }} {{ 'NAME' | translate }}</label>
+                            <div class="col-md-6">
+                                <input id="textinput" name="textinput" type="text" placeholder="Descriptive title" class="form-control input-md" ng-model="subcategoryName" required="">
+                            </div>
+                        </div>
+
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default" data-dismiss="modal">{{ 'CANCEL' | translate }}</button>
+                <button type="button" class="btn btn-primary" ng-click="createSubCategory()">{{ 'CREATESUBCATEGORY' | translate }}</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="modal fade" id="categUpdate" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                <h4 class="modal-title" id="myModalLabel">{{ 'UPDATECATEGORY' | translate }}</h4>
+            </div>
+            <div class="modal-body">
+                <div class="row">
+                    <div class="col-xs-12">
+                        <!-- Text input-->
+                        <div class="form-group">
+                            <label class="col-md-6 control-label" for="textinput">{{ 'CATEGORY' | translate }} {{ 'NAME' | translate }}</label>
+                            <div class="col-md-6">
+                                <input id="textinput" name="textinput" type="text" placeholder="Descriptive title" class="form-control input-md" ng-model="categoryName1.Name" required="">
+
+                            </div>
+                        </div>
+
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default" data-dismiss="modal">{{ 'CANCEL' | translate }}</button>
+                <button type="button" class="btn btn-primary" ng-click="updateCategory()">{{ 'UPDATECATEGORY' | translate }}</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="modal fade" id="ingEdit" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                <h4 class="modal-title" id="myModalLabel">{{ 'MODIFY' | translate }} {{editIngredient.Name}} ({{editIngredient.Quantity}})</h4>
+            </div>
+            <div class="modal-body">
+                <div>
+                    <div class="togglebutton text-center">
+                        <label>
+                            <span ng-class="{'text-danger':!addModify}">{{ 'REMOVE' | translate }}</span> &nbsp;&nbsp;
+                            <input type="checkbox" ng-bind="addModify" ng-model="addModify" checked>
+                            <span ng-class="{'text-success':addModify}">{{ 'ADD' | translate }}</span>
+                        </label>
+                    </div>
+
+                    <div class="form-group label-floating input-group">
+                        <span class="input-group-addon" ng-show="addModify">+</span>
+                        <span class="input-group-addon" ng-hide="addModify">-</span>
+                        <label class="control-label" for="focusedInput1">{{ 'ENTERAMOUNTTOMODIFY' | translate }}</label>
+                        <input class="form-control" id="focusedInput1" type="number" step="any" ng-model="editedQuantity">
+                        <span class="input-group-addon" ng-bind="shortForm(editIngredient.UnitType)">.</span>
+                    </div>
+                    <!-- Prepended text-->
+                    <div class="form-group">
+                        <label class="col-md-6 control-label" for="prependedtext">{{ 'MERMA' | translate }}</label>
+                        <div class="col-md-6">
+                            <div class="input-group">
+                                <input id="prependedtext" name="prependedtext" class="form-control" placeholder="0.0" type="text"   ng-model="merma">
+                            </div>
+
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="col-md-6 control-label" for="prependedtext">{{ 'COSTPERUNIT' | translate }}</label>
+                        <div class="col-md-6">
+                            <div class="input-group">
+                                <span class="input-group-addon">$</span>
+                                <input id="prependedtext" name="prependedtext" class="form-control" placeholder="0.0" type="text" ng-model="editIngredient.Cost" required="" ng-change="chagePrice()">
+                            </div>
+
+                        </div>
+                    </div>
+                    <!--<small ng-show="!editIngredient.message">Last change: {{employee.firstname}} added {{editIngredient.Quantity}}kg on {{editIngredient.updated_at | date:'medium'}}</small>-->
+
+                    <small ng-show="editIngredient.message">{{ 'LASTCHANGE' | translate }}: {{employee.firstname}} {{editIngredient.message}}</small>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <a href="javascript:void(0)" class="btn btn-danger align-left" ng-click="disableIngedients()">{{ 'DISABLE' | translate }}</a>
+                <button type="button" class="btn btn-default" data-dismiss="modal">{{ 'CLOSE' | translate }}</button>
+                <button type="button" class="btn btn-primary" ng-click="updateIngredient()">{{ 'SAVECHANGES' | translate }}</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="modal fade" id="ingAdd" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                <h4 class="modal-title" id="myModalLabel">{{ 'ADDNEWINGREDIENT' | translate }}</h4>
+            </div>
+            <div class="modal-body">
+                <div class="row">
+                    <div class="col-xs-12">
+                        <!-- Text input-->
+                        <div class="form-group">
+                            <label class="col-md-6 control-label" for="textinput">{{ 'INGREDIENT' | translate }}</label>
+                            <div class="col-md-6">
+                                <input id="textinput" name="textinput" type="text" placeholder="Descriptive title" class="form-control input-md" ng-model="ingredientName" required="">
+
+                            </div>
+                        </div>
+
+                        <!-- Select Basic -->
+                        <div class="form-group">
+                            <label class="col-md-6 control-label" for="selectbasic">{{ 'UNITTYPE' | translate }}</label>
+                            <div class="col-md-6">
+                                <select id="selectbasic" name="selectbasic" class="form-control" ng-model="unitType">
+                                    <option value="Kilograms" selected>{{ 'KILOGRAMS' | translate }}</option>
+                                    <option value="Grams">{{ 'GRAMS' | translate }}</option>
+                                    <option value="Litres">{{ 'LITRES' | translate }}</option>
+                                    <option value="Ounces">{{ 'OUNCES' | translate }}</option>
+                                    <option value="Units">{{ 'UNITS' | translate }}</option>
+                                    <option value="Milliliter">{{ 'MILLILITER' | translate }}</option>
+                                </select>
+                            </div>
+                        </div>
+
+                        <!-- Prepended text-->
+                        <div class="form-group">
+                            <label class="col-md-6 control-label" for="prependedtext">{{ 'COSTPERUNIT' | translate }}</label>
+                            <div class="col-md-6">
+                                <div class="input-group">
+                                    <span class="input-group-addon"></span>
+                                    <input id="prependedtext" name="prependedtext" class="form-control" placeholder="0.0" type="text" ng-model="costPrunit" required="">
+                                </div>
+
+                            </div>
+                        </div>
+
+                        <!-- Text input-->
+                        <div class="form-group">
+                            <label class="col-md-6 control-label" for="textinput">{{ 'INITIALAMOUNT' | translate }}</label>
+                            <div class="col-md-6">
+                                <input id="textinput" name="textinput" type="text" placeholder="0" class="form-control input-md" ng-model="amount" required="">
+
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label class="col-md-6 control-label" for="textinput">{{ 'MERMA' | translate }}</label>
+                            <div class="col-md-6">
+                                <input id="textinput" name="textinput" type="text" placeholder="0" class="form-control input-md" ng-model="merma" required="">
+
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default" data-dismiss="modal">{{ 'CANCEL' | translate }}</button>
+                <button type="button" class="btn btn-primary" ng-click="createIngedients()">{{ 'SAVECHANGES' | translate }}</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="modal fade" id="sidesEdit" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                <h4 class="modal-title" id="myModalLabel">{{ 'MODIFYSIDE' | translate }}</h4>
+            </div>
+            <div class="modal-body">
+                <div class="row">
+                    <div class="col-xs-12">
+                        <div class="form-group">
+                            <label class="col-md-4 control-label" for="textinput">{{ 'SIDENAME' | translate }}</label>
+                            <div class="col-md-4">
+                                <input id="textinput" name="textinput" type="text" value="Side Title" ng-model="SideUpdate.Name " class="form-control input-md" required>
+
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-xs-12">
+                        <div class="ingredient-search-module">
+                            <div class="ui-widget ingredient-search-control container-fluid">
+                                <div class="row">
+                                    <!--<div class="col-xs-12">
+                                        <label>Ingredients</label>
+                                    </div>-->
+                                    <div class="col-xs-12 col-sm-6">
+                                        <autocomplete attr-inputclass="form-control" attr-placeholder="{{ 'SEARCH' | translate }} {{ 'INGREDIENTS' | translate }}" ng-model="selecctIngredients" data="allIngedientsName" on-select="onAddExtraIngredients"></autocomplete>
+                                        <!--<select ng-model="addIngredientTitle" ng-options="item as item.Name for item in allIngedients"></select>-->
+                                        <!--<select id="combobox" ng-model="addIngredientTitle">
+                                              <option value="" disabled selected>Search for Ingredients</option>
+                                              <option value="Ultrasound Knee Right">Ultrasound Knee Right</option>
+                                              <option value="Ultrasound Knee Left">Ultrasound Knee Left</option>
+                                              <option value="Ultrasound Forearm/Elbow Right">Ultrasound Forearm/  Elbow Right</option>
+                                              <option value="Ultrasound Forearm/Elbow Left">Ultrasound Forearm/Elbow Left</option>
+                                              <option value="MRI Knee Right">MRI Knee Right</option>
+                                              <option value="MRI Knee Left">MRI Knee Left</option>
+                                              <option value="MRI Forearm/Elbow Right">MRI Forearm/Elbow Right</option>
+                                              <option value="MRI Forearm/Elbow Left">MRI Forearm/Elbow Left</option>
+                                              <option value="CT Knee Right">CT Knee Right</option>
+                                              <option value="CT Knee Left">CT Knee Left</option>
+                                              <option value="CT Forearm/Elbow Right">CT Forearm/Elbow Right</option>
+                                              <option value="CT Forearm/Elbow Left">CT Forearm/Elbow Left</option>
+                                        </select>-->
+
+                                    </div>
+                                    <div class="col-xs-5 col-sm-3">
+                                        <input type="number" min="0" step="any" class="form-control" placeholder="Quantity" ng-model="addIngredientQuantity">
+                                    </div>
+                                    <div class="col-xs-2 col-sm-1">
+                                        <select class="form-control" id="id1" ng-model="toUnit" ng-options="Units.short for Units in UnitsForConverts">
+                                            <!--<option ng-bind="shortForm(addIngredientTitle.UnitType)" value="shortForm(addIngredientTitle.UnitType)"></option>-->
+                                        </select>
+
+                                        <!--<span ng-bind="shortForm(addIngredientTitle.UnitType)"></span>-->
+                                    </div>
+                                    <div class="col-xs-5 col-sm-2">
+                                        <button class="btn btn-warning" ng-click="addSlide('Update')">{{ 'ADD' | translate }} </button>
+                                    </div>
+                                </div>
+                            </div>
+                            <hr />
+                            <ul class="list-group ingredient-search-container">
+                                <li class="list-group-item row" ng-repeat="i in SideUpdate.Ingradients">
+                                    <div class="col-xs-5"><strong>{{getIngName(i)}}</strong></div>
+                                    <div class="col-xs-4 text-center"><span>{{i.quantity}} <span ng-bind="shortForm(i.name.UnitType)"></span></span></div>
+                                    <div class="col-xs-3"><a href="javascript:void(0)" class="btn btn-raised btn-danger btn-xs pull-right" ng-click="removeIngedient(i,'Update')"><i class="material-icons">clear</i></a></div>
+                                </li>
+                                <li class="list-group-item row" ng-show="SideUpdate.Ingradients.length==0">
+                                    <div style="text-align: center;"><strong>{{ 'NOINGREDIENTSTOADD' | translate }}</strong></div>
+                                </li>
+                                <!--<li class="list-group-item row">
+                                      <div class="col-xs-5"><strong>Ingredient name</strong></div>
+                                      <div class="col-xs-4 text-center"><span>25 Kg</span></div>
+                                      <div class="col-xs-3"><a href="javascript:void(0)" class="btn btn-raised btn-danger btn-xs pull-right"><i class="material-icons">clear</i></a></div>
+                                </li>-->
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+            <div class="modal-footer">
+                <a href="javascript:void(0)" class="btn btn-danger align-left" ng-click="disableSide()">Disable</a>
+                <button type="button" class="btn btn-default" data-dismiss="modal">{{ 'CLOSE' | translate }}</button>
+                <button type="button" class="btn btn-primary" ng-click="updateSides()">{{ 'SAVECHANGES' | translate }}</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="modal fade" id="sidesAdd" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                <h4 class="modal-title" id="myModalLabel">{{ 'ADDNEWSIDE' | translate }}</h4>
+            </div>
+            <div class="modal-body">
+                <div class="row">
+                    <div class="col-xs-12">
+                        <div class="form-group">
+                            <label class="col-md-4 control-label" for="textinput">{{ 'SIDENAME' | translate }}</label>
+                            <div class="col-md-4">
+                                <input id="textinput" name="textinput" type="text" value="Side Title" class="form-control input-md" ng-model="slideName" required>
+
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-xs-12">
+                        <div class="ingredient-search-module">
+                            <div class="ui-widget ingredient-search-control container-fluid">
+                                <div class="row">
+                                    <!--<div class="col-xs-12">
+                                        <label>Ingredients</label>
+                                    </div>-->
+                                    <div class="col-xs-12 col-sm-6">
+                                        <autocomplete attr-inputclass="form-control" attr-placeholder="{{ 'SEARCH' | translate }} {{ 'INGREDIENTS' | translate }}" ng-model="selecctIngredients" data="allIngedientsName" on-select="onAddExtraIngredients"></autocomplete>
+                                        <!--<select ng-model="addIngredientTitle" ng-options="item as item.Name for item in allIngedients"></select>-->
+
+                                       <!--ayush-->
+                                    </div>
+                                    <div class="col-xs-5 col-sm-3">
+                                        <input type="number" min="0" step="any" class="form-control" placeholder="Quantity" ng-model="addIngredientQuantity">
+                                 
+                                      </div>
+                                    <div class="col-xs-2 col-sm-1">
+
+	                                    <select class="form-control" id="id1" ng-model="toUnit" ng-options="Units.short for Units in UnitsForConverts" >
+										  <!--<option ng-bind="shortForm(addIngredientTitle.UnitType)" value="shortForm(addIngredientTitle.UnitType)"></option>-->
+										</select>
+                                       
+                                    </div>
+                                    <div class="col-xs-5 col-sm-2">
+                                        <button class="btn btn-warning" ng-click="addSlide('New')">{{ 'ADD' | translate }} </button>
+                                    </div>
+                                </div>
+                            </div>
+                            <hr />
+                            <ul class="list-group ingredient-search-container">
+                                <li class="list-group-item row" ng-repeat="i in addSlideIngredient">
+                                    <div class="col-xs-5"><strong>{{ getIngName(i) }}</strong></div>
+                                    <div class="col-xs-4 text-center"><span>{{i.quantity}} <span ng-bind="shortForm(i.name.UnitType)"></span></span></div>
+                                    <div class="col-xs-3"><a href="javascript:void(0)" class="btn btn-raised btn-danger btn-xs pull-right" ng-click="removeIngedient(i,'New')"><i class="material-icons">clear</i></a></div>
+                                </li>
+                                <li class="list-group-item row" ng-show="addSlideIngredient.length==0">
+                                    <div style="text-align: center;"><strong> {{ 'NOINGREDIENTSTOADD' | translate }}</strong></div>
+                                </li>
+                                <!--<li class="list-group-item row">
+                                      <div class="col-xs-5"><strong>Ingredient name</strong></div>
+                                      <div class="col-xs-4 text-center"><span>25 Kg</span></div>
+                                      <div class="col-xs-3"><a href="javascript:void(0)" class="btn btn-raised btn-danger btn-xs pull-right"><i class="material-icons">clear</i></a></div>
+                                </li>-->
+                            </ul>
+
+
+
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default" data-dismiss="modal">{{ 'CANCEL' | translate }}</button>
+                <button type="button" class="btn btn-primary" ng-click="createSlide()">{{ 'SAVECHANGES' | translate }}</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="modal fade" id="productionEdit" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                <h4 class="modal-title" id="myModalLabel">{{ 'MODIFYSIDE' | translate }}</h4>
+            </div>
+            <div class="modal-body">
+                <div class="row">
+                    <div class="col-xs-12">
+                        <div class="form-group">
+                            <label class="col-md-4 control-label" for="textinput">{{ 'NAME' | translate }}</label>
+                            <div class="col-md-8">
+                                <input id="textinput" name="textinput" type="text" value="Side Title" class="form-control input-md" ng-model="ProductionUpdate.Name" required>
+
+                            </div>
+                        </div>
+                        
+                        <!-- Select Basic -->
+                        <!--<div class="form-group">
+                            <label class="col-md-4 control-label" for="selectbasic">{{ 'UNITTYPE' | translate }}</label>
+                            <div class="col-md-8">
+                                <select id="selectbasic" name="selectbasic" class="form-control" ng-model="productionUnitType">
+                                    <option value="Kilograms" selected>{{ 'KILOGRAMS' | translate }}</option>
+                                    <option value="Grams">{{ 'GRAMS' | translate }}</option>
+                                    <option value="Litres">{{ 'LITRES' | translate }}</option>
+                                    <option value="Ounces">{{ 'OUNCES' | translate }}</option>
+                                    <option value="Units">{{ 'UNITS' | translate }}</option>
+                                </select>
+                            </div>
+                        </div>-->
+                        
+                        
+                        <!-- Text input-->
+                        <div class="form-group">
+                            <label class="col-md-4 control-label" for="textinput">Amount per making</label>
+                            <div class="col-md-8">
+                                <input id="textinput" name="textinput" type="text" placeholder="0" class="form-control input-md" ng-model="ProductionUpdate.Productionamount" required="">
+
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-xs-12">
+                        <div class="ingredient-search-module">
+                            <div class="ui-widget ingredient-search-control container-fluid">
+                                <div class="row">
+                                    <!--<div class="col-xs-12">
+                                        <label>Ingredients</label>
+                                    </div>-->
+                                    <div class="col-xs-12 col-sm-6">
+                                        <autocomplete attr-inputclass="form-control" attr-placeholder="{{ 'SEARCH' | translate }} {{ 'INGREDIENTS' | translate }}" ng-model="selectIngredients" data="allIngedientsName" on-select="onAddExtraIngredients"></autocomplete>
+                                        <!--<select ng-model="addIngredientTitle" ng-options="item as item.Name for item in allIngedients"></select>-->
+                                        <!--<select id="combobox" ng-model="addIngredientTitle">
+                                              <option value="" disabled selected>Search for Ingredients</option>
+                                              <option value="Ultrasound Knee Right">Ultrasound Knee Right</option>
+                                              <option value="Ultrasound Knee Left">Ultrasound Knee Left</option>
+                                              <option value="Ultrasound Forearm/Elbow Right">Ultrasound Forearm/  Elbow Right</option>
+                                              <option value="Ultrasound Forearm/Elbow Left">Ultrasound Forearm/Elbow Left</option>
+                                              <option value="MRI Knee Right">MRI Knee Right</option>
+                                              <option value="MRI Knee Left">MRI Knee Left</option>
+                                              <option value="MRI Forearm/Elbow Right">MRI Forearm/Elbow Right</option>
+                                              <option value="MRI Forearm/Elbow Left">MRI Forearm/Elbow Left</option>
+                                              <option value="CT Knee Right">CT Knee Right</option>
+                                              <option value="CT Knee Left">CT Knee Left</option>
+                                              <option value="CT Forearm/Elbow Right">CT Forearm/Elbow Right</option>
+                                              <option value="CT Forearm/Elbow Left">CT Forearm/Elbow Left</option>
+                                        </select>-->
+
+                                    </div>
+                                    <div class="col-xs-5 col-sm-3">
+                                        <input type="number" min="0" step="any" class="form-control" placeholder="Quantity" ng-model="addIngredientQuantity">
+                                    </div>
+                                    <div class="col-xs-2 col-sm-1">
+                                        <select class="form-control" id="id1" ng-model="toUnit" ng-options="Units.short for Units in UnitsForConverts">
+                                            <!--<option ng-bind="shortForm(addIngredientTitle.UnitType)" value="shortForm(addIngredientTitle.UnitType)"></option>-->
+                                        </select>
+                                        <!--<span ng-bind="shortForm(addIngredientTitle.UnitType)"></span>-->
+                                    </div>
+                                    <div class="col-xs-5 col-sm-2">
+                                        <button class="btn btn-warning" ng-click="AddProductionIng('Update')">{{ 'ADD' | translate }} </button>
+                                    </div>
+                                </div>
+                            </div>
+                            <hr />
+                            <ul class="list-group ingredient-search-container">
+                                <li class="list-group-item row" ng-repeat="i in ProductionUpdate.Ingradients">
+                                    <div class="col-xs-5"><strong>{{getIngName(i)}}</strong></div>
+                                    <div class="col-xs-4 text-center"><span>{{i.quantity}} <span ng-bind="shortForm(i.name.UnitType)"></span></span></div>
+                                    <div class="col-xs-3"><a href="javascript:void(0)" class="btn btn-raised btn-danger btn-xs pull-right" ng-click="removeProductionIngedient(i,'Update')"><i class="material-icons">clear</i></a></div>
+                                </li>
+                                <li class="list-group-item row" ng-show="ProductionUpdate.Ingradients.length==0">
+                                    <div style="text-align: center;"><strong>{{ 'NOINGREDIENTSTOADD' | translate }}</strong></div>
+                                </li>
+                                <!--<li class="list-group-item row">
+                                      <div class="col-xs-5"><strong>Ingredient name</strong></div>
+                                      <div class="col-xs-4 text-center"><span>25 Kg</span></div>
+                                      <div class="col-xs-3"><a href="javascript:void(0)" class="btn btn-raised btn-danger btn-xs pull-right"><i class="material-icons">clear</i></a></div>
+                                </li>-->
+                            </ul>
+                        </div>
+                        <p ng-if="ProductionUpdate.message">Last change: {{ProductionUpdate.message}}</p>
+                    </div>
+                </div>
+
+            </div>
+            <div class="modal-footer">
+                <a href="javascript:void(0)" class="btn btn-danger align-left" ng-click="disableProduction(ProductionUpdate)">Disable</a>
+                <button type="button" class="btn btn-default" data-dismiss="modal">{{ 'CLOSE' | translate }}</button>
+                <button type="button" class="btn btn-primary" ng-click="updateProduction()">{{ 'SAVECHANGES' | translate }}</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="modal fade" id="modalDeleteProduct" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" style="z-index:10000">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                <h4 class="modal-title" id="myModalLabel">{{ 'CANCELORDER' | translate }}</h4>
+            </div>
+            <div class="modal-body">
+                <form class="form-horizontal">
+                    <fieldset>
+                        <legend>{{ 'DOYOUREALLYWANTTODELETETHISPRODUCT' | translate }}</legend>
+
+                    </fieldset>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default" data-dismiss="modal">{{ 'CANCEL' | translate }}</button>
+                <button type="button" class="btn btn-primary" ng-click="DeleteProduct()">{{ 'CONFIRM' | translate }}</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="modal fade" id="productionAdd" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                <h4 class="modal-title" id="myModalLabel">{{ 'ADDNEWPRODUCTION' | translate }}</h4>
+            </div>
+            <div class="modal-body">
+                <div class="row">
+                    <div class="col-xs-12">
+                        <div class="form-group">
+                            <label class="col-md-4 control-label" for="textinput">{{ 'NAME' | translate }}</label>
+                            <div class="col-md-8">
+                                <input id="textinput" name="textinput" type="text" value="Side Title" class="form-control input-md" ng-model="productionName" required>
+
+                            </div>
+                        </div>
+                        
+                        <!-- Select Basic -->
+                        <div class="form-group">
+                            <label class="col-md-4 control-label" for="selectbasic">{{ 'UNITTYPE' | translate }}</label>
+                            <div class="col-md-8">
+                                <select id="selectbasic" name="selectbasic" class="form-control" ng-model="productionUnitType">
+                                    <option value="Kilograms" selected>{{ 'KILOGRAMS' | translate }}</option>
+                                    <option value="Grams">{{ 'GRAMS' | translate }}</option>
+                                    <option value="Litres">{{ 'LITRES' | translate }}</option>
+                                    <option value="Ounces">{{ 'OUNCES' | translate }}</option>
+                                    <option value="Units">{{ 'UNITS' | translate }}</option>
+                                    <option value="Milliliter">{{ 'MILLILITER' | translate }}</option>
+                                </select>
+                            </div>
+                        </div>
+                        
+                        
+                        <!-- Text input-->
+                        <div class="form-group">
+                            <label class="col-md-4 control-label" for="textinput">Amount per making</label>
+                            <div class="col-md-8">
+                                <input id="textinput" name="textinput" type="text" placeholder="0" class="form-control input-md" ng-model="productionamount" required="">
+
+                            </div>
+                        </div>
+                        
+
+                        
+
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-xs-12">
+                        <div class="ingredient-search-module">
+                            <div class="ui-widget ingredient-search-control container-fluid">
+                                <div class="row">
+                                    <!--<div class="col-xs-12">
+                                        <label>Ingredients</label>
+                                    </div>-->
+                                    <div class="col-xs-12 col-sm-6">
+                                        <autocomplete attr-inputclass="form-control" attr-placeholder="{{ 'SEARCH' | translate }} {{ 'INGREDIENTS' | translate }}" ng-model="selectIngredients" data="allIngedientsName" on-select="onAddExtraIngredients"></autocomplete>
+                                        <!--<select ng-model="addIngredientTitle" ng-options="item as item.Name for item in allIngedients"></select>-->
+                                
+
+                                    </div>
+                                    <div class="col-xs-5 col-sm-3">
+                                      <!--check select position-->
+                                        <input type="number" min="0" step="any" class="form-control" placeholder="Quantity" ng-model="addIngredientQuantity">
+                                    </div>
+                                    <div class="col-xs-2 col-sm-1">
+                                        <select class="form-control" id="id1" ng-model="toUnit" ng-options="Units.short for Units in UnitsForConverts">
+                                            <!--<option ng-bind="shortForm(addIngredientTitle.UnitType)" value="shortForm(addIngredientTitle.UnitType)"></option>-->
+                                        </select>
+										  
+                                        <!--<span ng-bind="shortForm(addIngredientTitle.UnitType)"></span>-->
+                                    </div>
+                                    <div class="col-xs-5 col-sm-2">
+                                        <button class="btn btn-warning" ng-click="AddProductionIng('New')">{{ 'ADD' | translate }} </button>
+                                    </div>
+                                </div>
+                            </div>
+                            <hr />
+                            <ul class="list-group ingredient-search-container">
+                                <li class="list-group-item row" ng-repeat="i in addProductionIngredient">
+                                    <div class="col-xs-5"><strong>{{ getIngName(i) }}</strong></div>
+                                    <div class="col-xs-4 text-center"><span>{{i.quantity}} <span ng-bind="shortForm(i.name.UnitType)"></span></span></div>
+                                    <div class="col-xs-3"><a href="javascript:void(0)" class="btn btn-raised btn-danger btn-xs pull-right" ng-click="removeProductionIngedient(i,'New')"><i class="material-icons">clear</i></a></div>
+                                </li>
+                                <li class="list-group-item row" ng-show="addProductionIngredient.length==0">
+                                    <div style="text-align: center;"><strong> {{ 'NOINGREDIENTSTOADD' | translate }}</strong></div>
+                                </li>
+                                <!--<li class="list-group-item row">
+                                      <div class="col-xs-5"><strong>Ingredient name</strong></div>
+                                      <div class="col-xs-4 text-center"><span>25 Kg</span></div>
+                                      <div class="col-xs-3"><a href="javascript:void(0)" class="btn btn-raised btn-danger btn-xs pull-right"><i class="material-icons">clear</i></a></div>
+                                </li>-->
+                            </ul>
+
+
+
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default" data-dismiss="modal">{{ 'CANCEL' | translate }}</button>
+                <button type="button" class="btn btn-primary" ng-click="createProduction()">{{ 'SAVECHANGES' | translate }}</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<!--<div ng-include src="'/public/app/modules/inventoryManager/models/production/productionadd.html'"></div>-->
+

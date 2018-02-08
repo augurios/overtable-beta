@@ -1,0 +1,98 @@
+<section id="main">
+
+    <section class="container">
+        <div class="col-xs-12 col-sm-12">
+            <p class="lead text-center"> {{ 'SETTINGS' | translate }}</p>
+        </div>
+    </section>
+    
+    <section class="container">
+    	
+    	<div class="row">
+    		<div class="col-xs-12 col-md-6 col-md-offset-3">
+	    		<form >
+			  <fieldset>
+				  
+				  <div class="panel panel-default">
+						  <div class="panel-heading">
+							  <h3>{{ 'PRINTOPTIONS' | translate }}</h3>
+						  </div>
+						  <div class="panel-body">
+							 <div class="row">
+							 	<div class="col-md-12">
+							     <div class="form-group">
+								    <label for="printer1">{{ 'INVOICEORINTER' | translate }}</label>
+								    <select class="form-control" id="printer1" ng-model="currentPrinters.Printer1" ng-change="saveSettings()" >
+									    <option ng-repeat="printer in allPrinters" value="{{printer.device}}">{{printer.name}}</option>
+									 
+									</select>
+								    
+								    <span class="help-block">{{ 'SELECTINVOICEPRINTERHELPPER' | translate }}</span>
+								 </div>
+							     <div class="form-group">
+								    <label for="printer2">{{ 'ORDERPRINTER' | translate }} 1</label>
+								    <select class="form-control" id="printer2" ng-model="currentPrinters.Printer2" ng-change="saveSettings()" >
+									  <option ng-repeat="printer in allPrinters" value="{{printer.device}}">{{printer.name}}</option>
+									</select>
+								    
+								    <span class="help-block">{{ 'SELECTPRINTERORDERS' | translate }}</span>
+								 </div>
+							     <div class="form-group">
+								    <label for="printer3">{{ 'ORDERPRINTER' | translate }} 2</label>
+								     <select class="form-control" id="printer3" ng-model="currentPrinters.Printer3" ng-change="saveSettings()" >
+									  <option ng-repeat="printer in allPrinters" value="{{printer.device}}">{{printer.name}}</option>
+									</select>
+								    
+								    <span class="help-block">{{ 'SELECTPRINTERORDERS' | translate }}</span>
+								 </div>
+							     <div class="form-group">
+								     <label class="checkbox-inline">
+									  <input type="checkbox" id="inlineCheckbox1" value="true" ng-model="currentPrinters.printOnOrderPlace" ng-change="saveSettings()" > {{ 'PRINTORDEROPTION1' | translate }}
+									</label>
+							     </div>
+							     <div class="form-group">
+									<label class="checkbox-inline">
+									  <input type="checkbox" id="inlineCheckbox2" value="option2" ng-model="currentPrinters.printOnOrderComplete" ng-change="saveSettings()" > {{ 'PRINTORDEROPTION2' | translate }}
+									</label>
+							     </div>
+							     
+							     </div>
+							 </div>
+						  </div>
+						</div>
+						
+						
+				  <div class="panel panel-default">
+						  <div class="panel-heading">
+							  <h3>Order Options</h3>
+						  </div>
+						  <div class="panel-body">
+							 <div class="row">
+							 	<div class="col-md-12">
+							     <div class="form-group">
+									<label class="checkbox-inline">
+									  <input type="checkbox" id="inlineCheckbox2" value="isNegativeOrder" ng-model="isNegativeOrder" ng-change="NegativeOrderSettings(isNegativeOrder)"> Allow negative ordering
+									</label>
+							     </div>
+							     
+							     </div>
+							 </div>
+						  </div>
+						</div>
+				 
+				
+				 
+				
+					<!-- <div class="form-group">
+					 	<button type="submit" name="submitbtn" class="btn btn-primary btn-raised" >Update</button>
+					 </div> -->
+			  </fieldset>
+			</form>
+    		</div>
+    	</div>
+    	
+    </section>
+
+</section>
+
+

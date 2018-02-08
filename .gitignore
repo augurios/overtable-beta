@@ -1,0 +1,7 @@
+vendors/
+nouploads/
+public/app/libs/src/library.min.js
+.idea
+package-lock.json
+node_modules/
+dist/
