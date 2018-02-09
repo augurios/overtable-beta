@@ -476,7 +476,7 @@
 				alertservice.showAlert('error', "success", 'Factura enviada a impresora.');
 				$scope.printEnabled = false;
 	            }, failPayload);
-            }, 3500);
+            }, 4000);
         }
         
         //dollar convertion
@@ -673,50 +673,54 @@
         $scope.addInvoice = function () {
 	        $scope.postingNewInvoice = true;
 	        var loggedinUser = JSON.parse(localStorage.getItem('CURRENTEMP'));
-            if ($scope.InvoiceName != undefined && $scope.InvoiceName != '') {
-                var tbtoadd = _.find($scope.tables, { _id: $scope.currentOpenTable._id });
-                
-                var emtoadd = _.find($scope.Allemployee, { _id: loggedinUser._id });
-                var obj = cashierBillsServiceFn.defaultInvoiceObject($scope.InvoiceName, tbtoadd, emtoadd, getEmployee.restaurant, $scope.people)
-                 $scope.getInvoiceNumber()
-                   .then(function(data){
-                     obj.invoiceNumber =data.no;
-                     cashierBillsServiceFn.addSingleInvoiceToLocalDB(obj).then(function (response) {
-                 //      console.log("add invoice rsponse");
-                 //      console.log(response);
-                       $scope.allInvoice = $scope.allInvoice || [];
-                       $scope.allInvoice.push(response);
-                       $scope.reinitlizeAddInvoiceModal();
-                       $scope.Tabledetail(response, true);
-                       $scope.$emit("syncInvoice", response);
-                       $scope.InvoiceName = "";
-                       $scope.postingNewInvoice = false;
-                        alertservice.showAlert('error', "success",$translate.instant('ADDEDNEWINVOICE'));
-                     });
-                   });
-            } else {
-                var tbtoadd = _.find($scope.tables, { _id: $scope.currentOpenTable._id });
-               
-                var emtoadd = _.find($scope.Allemployee, { _id: loggedinUser._id });
-                var obj = cashierBillsServiceFn.defaultInvoiceObject("cliente", tbtoadd, emtoadd, getEmployee.restaurant, $scope.people)
-                 $scope.getInvoiceNumber()
-                   .then(function(data){
-	         
-                     obj.invoiceNumber = data.no;
-                     obj.clientName = obj.clientName + data.no.toString();
-                     cashierBillsServiceFn.addSingleInvoiceToLocalDB(obj).then(function (response) {
-                 //      console.log("add invoice rsponse");
-                //       console.log(response);
-                       $scope.allInvoice = $scope.allInvoice || [];
-                       $scope.allInvoice.push(response);
-                       $scope.reinitlizeAddInvoiceModal();
-                       $scope.Tabledetail(response, true);
-                       $scope.$emit("syncInvoice", response);
-                       $scope.postingNewInvoice = false;
-                        alertservice.showAlert('error', "success",$translate.instant('ADDEDNEWINVOICE'));
-                     });
-                   });
-            }
+	        if ($scope.InvoiceName != undefined && $scope.InvoiceName != '') {
+	            var tbtoadd = _.find($scope.tables, { _id: $scope.currentOpenTable._id });
+
+	            var emtoadd = _.find($scope.Allemployee, { _id: loggedinUser._id });
+	            var obj = cashierBillsServiceFn.defaultInvoiceObject($scope.InvoiceName, tbtoadd, emtoadd, getEmployee.restaurant, $scope.people)
+	            $scope.getInvoiceNumber()
+                  .then(function (data) {
+                      obj.invoiceNumber = data.no;
+                      cashierBillsServiceFn.addSingleInvoiceToLocalDB(obj).then(function (response) {
+                          //      console.log("add invoice rsponse");
+                          //      console.log(response);
+                          $scope.invoiceRepo = $scope.invoiceRepo || [];
+                          $scope.invoiceRepo.push(response);
+                          $scope.allInvoice = $scope.allInvoice || [];
+                          $scope.allInvoice.push(response);
+                          $scope.reinitlizeAddInvoiceModal();
+                          $scope.Tabledetail(response, true);
+                          $scope.$emit("syncInvoice", response);
+                          $scope.InvoiceName = "";
+                          $scope.postingNewInvoice = false;
+                          alertservice.showAlert('error', "success", $translate.instant('ADDEDNEWINVOICE'));
+                      });
+                  });
+	        } else {
+	            var tbtoadd = _.find($scope.tables, { _id: $scope.currentOpenTable._id });
+
+	            var emtoadd = _.find($scope.Allemployee, { _id: loggedinUser._id });
+	            var obj = cashierBillsServiceFn.defaultInvoiceObject("cliente", tbtoadd, emtoadd, getEmployee.restaurant, $scope.people)
+	            $scope.getInvoiceNumber()
+                  .then(function (data) {
+
+                      obj.invoiceNumber = data.no;
+                      obj.clientName = obj.clientName + data.no.toString();
+                      cashierBillsServiceFn.addSingleInvoiceToLocalDB(obj).then(function (response) {
+                          //      console.log("add invoice rsponse");
+                          //       console.log(response);
+                          $scope.invoiceRepo = $scope.invoiceRepo || [];
+                          $scope.invoiceRepo.push(response);
+                          $scope.allInvoice = $scope.allInvoice || [];
+                          $scope.allInvoice.push(response);
+                          $scope.reinitlizeAddInvoiceModal();
+                          $scope.Tabledetail(response, true);
+                          $scope.$emit("syncInvoice", response);
+                          $scope.postingNewInvoice = false;
+                          alertservice.showAlert('error', "success", $translate.instant('ADDEDNEWINVOICE'));
+                      });
+                  });
+	        }
         }
 
         $scope.EditInvoice = function (currentinvoice,modalid) {

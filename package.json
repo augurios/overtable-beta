@@ -1,7 +1,7 @@
 {
   "name": "Overtable-beta",
   "main": "launcher.js",
-  "version": "1.3.9",
+  "version": "1.4.0-beta.1",
   "description": "The project for resturants/manage",
   "private": true,
   "scripts": {
@@ -20,7 +20,7 @@
         "dmg"
       ]
     },
-    "productName": "Overtable",
+    "productName": "Overtable Beta",
     "copyright": "Copyright © 2018 Disruptive Partners"
   },
   "license": "ISC",

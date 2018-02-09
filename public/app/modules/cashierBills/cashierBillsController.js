@@ -419,7 +419,7 @@
 		       			alertservice.showAlert('error', "success", 'Factura enviada a impresora.');
 		        }, failPayload);
 
-            }, 3500);
+            }, 4000);
         }
         
         //dollar convertion

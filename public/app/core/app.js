@@ -91,9 +91,11 @@
 
                             utilservice.syncINVOICES(true).then(function (invsyncstatus) {
                                 setTimeout(function () {
-                                    utilservice.loadShift();
-                                    utilservice.loadInvoices();
-                                    utilservice.loadOrders();
+                                    utilservice.loadShift().then(function (shiftId) {
+                                        utilservice.loadAppData(shiftId);
+                                    });
+                                    //utilservice.loadInvoices();
+                                    //utilservice.loadOrders();
                                 }, 2000);
                             })
 
@@ -105,11 +107,7 @@
 
         $rootScope.connection = function (obj) {
             $rootScope.loadApp();
-            try{
-                $rootScope.socket.emit('connectUser', obj);
-            }catch(err){
-            
-            }
+            $rootScope.socket.emit('connectUser', obj);
         }
 
         $rootScope.connectSocket = function () {

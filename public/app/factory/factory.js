@@ -611,6 +611,7 @@ function utilserviceFn($http, $rootScope, $q, pouchDB, alertservice, localStorag
         loadProduct, loadProduct,
         loadEmployees: loadEmployees,
         loadInvoices: loadInvoices,
+        loadAppData:loadAppData,
         loadOrders: loadOrders,
         loadBillNumber:loadBillNumber,
         getEmployees: getEmployees,
@@ -968,9 +969,9 @@ function utilserviceFn($http, $rootScope, $q, pouchDB, alertservice, localStorag
                             return newDoc;
                         }
                         _shelf.addOrUpdateDocInPouchDB('CurrentShift', res.data.shift, mofiyfn)
-                        resolve(true);
+                        resolve(res.data.shift.clientId);
                     } else
-                        resolve(false);
+                        resolve(null);
                 }, function (res) {
                     console.log();
                 });
@@ -979,9 +980,9 @@ function utilserviceFn($http, $rootScope, $q, pouchDB, alertservice, localStorag
                     var shiftdata = existDocument.shiftdata;
                     localStorage.setItem('ShiftUser', JSON.stringify(shiftdata));
                     localStorage.setItem("currentShiftid", shiftdata.clientId);
-                    resolve(true);
+                    resolve(shiftdata.clientId);
                 }).catch(function (err) {
-                    resolve(false);
+                    resolve(null);
                 });
             }
         });
@@ -1140,6 +1141,118 @@ function utilserviceFn($http, $rootScope, $q, pouchDB, alertservice, localStorag
             }
         }
         return existDocument;
+    }
+
+    function loadAppData(shiftId) {
+        var _self = this;
+        var time = new Date();
+        return $q((resolve, reject) => {
+            var resId = localStorage.getItem("resId");
+            console.log("calling loadAppData api");
+            var toPost = {
+                resId: localStorage.getItem("resId"),
+                shiftId: shiftId
+            };
+            $http.post(window.APIBASEURL + '/clientapp/sync/loadappdata', toPost).then(function (apiresponse) {
+
+                var time = new Date();
+
+                var invoices = [];
+                if (apiresponse && apiresponse.data)
+                    invoices = apiresponse.data.INVOICES;
+                var filteredinvoices = [];
+                for (var i = 0 ; i < invoices.length; i++) {
+                    if (!invoices[i].tables)
+                        invoices[i].tables = { _id: '-1', number: 'No Table' }
+                    if (invoices[i].restaurant == resId) {
+                        invoices[i].lastupdatetime = time
+                        invoices[i].lastsynctime = time
+                        filteredinvoices.push(invoices[i]);
+                    }
+                }
+
+                function restorInvoiceModfiyfn(isExist, catid, doctomanage, existDocument) {
+                    var time = new Date();
+                    if (isExist) {
+                        //existDocument.docdata = doctomanage; //check if there is any invoic ein loal which is not coming form the server
+                        existDocument.docdata = existDocument.docdata || [];
+                        if (existDocument.docdata instanceof Array) { }
+                        else existDocument.docdata = [];
+                        for (var cnt = 0; cnt < existDocument.docdata.length; cnt++) {
+                            var _isExist = _.find(doctomanage, function (onedoc) {
+                                return onedoc.clientId == existDocument.docdata[cnt].clientId
+                            });
+                            if (!_isExist)
+                                doctomanage.push(existDocument.docdata[cnt]);
+                        }
+                        existDocument.lastupdatetime = time;
+                        existDocument.lastsynctime = time;
+                    } else {
+                        existDocument = {
+                            _id: catid,
+                            docdata: doctomanage,
+                            lastupdatetime: time,
+                            lastsynctime: time
+                        }
+                    }
+                    return existDocument;
+                }
+
+                _self.addOrUpdateDocInPouchDB('INVOICES', filteredinvoices, restorInvoiceModfiyfn).then(function (localreponse) {
+                }).catch(function (err) {
+                    console.log("error in addinf category");
+                });
+
+
+
+                var orders = [];
+                if (apiresponse && apiresponse.data)
+                    orders = apiresponse.data.ORDERS;
+
+                var filteredorders = [];
+                for (var i = 0 ; i < orders.length; i++) {
+                    if (orders[i].restaurantId == resId) {
+                        orders[i].lastupdatetime = time
+                        orders[i].lastsynctime = time
+                        filteredorders.push(orders[i]);
+                    }
+                }
+
+                function restorOrderModfiyfn(isExist, catid, doctomanage, existDocument) {
+                    var time = new Date();
+                    if (isExist) {
+                        existDocument.docdata = existDocument.docdata || [];
+                        if (existDocument.docdata instanceof Array) { }
+                        else existDocument.docdata = [];
+                        for (var cnt = 0; cnt < existDocument.docdata.length; cnt++) {
+                            var _isExist = _.find(doctomanage, function (onedoc) {
+                                return onedoc.clientId == existDocument.docdata[cnt].clientId
+                            });
+                            if (!_isExist)
+                                doctomanage.push(existDocument.docdata[cnt]);
+                        }
+                        existDocument.docdata = doctomanage; //check if there is any order in loal which is not coming form the server
+                        existDocument.lastupdatetime = time;
+                        existDocument.lastsynctime = time;
+                    } else {
+                        existDocument = {
+                            _id: catid,
+                            docdata: doctomanage,
+                            lastupdatetime: time,
+                            lastsynctime: time
+                        }
+                    }
+                    return existDocument;
+                }
+
+                _self.addOrUpdateDocInPouchDB('ORDERS', filteredorders, restorOrderModfiyfn).then(function (localreponse) {
+                }).catch(function (err) {
+                    console.log("error in addinf category");
+                });
+
+             //   console.log(response);
+            }, handleError('Error getting all users'));
+        });
     }
 
     function loadInvoices() {
