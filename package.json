@@ -1,7 +1,7 @@
 {
   "name": "Overtable-beta",
   "main": "launcher.js",
-  "version": "1.4.0-beta.1",
+  "version": "1.4.0-beta.2",
   "description": "The project for resturants/manage",
   "private": true,
   "scripts": {
