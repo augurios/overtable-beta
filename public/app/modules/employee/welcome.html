@@ -15,7 +15,7 @@
 					    		<h2><span translate>.SHIFTSTATUS</span>: <small class="text-danger" ng-hide="shiftOpen" translate>.CLOSED</small> <small class="text-primary" ng-show="shiftOpen" translate>.OPEN</small></h2>
 							</div>
 			    			<div class="col-md-6 text-right">
-				    			<h3 class="cashier-state" ng-show="shiftOpen"> <span class="badge">{{shift.closingBalance}}</span></h3>
+				    			<h3 class="cashier-state" ng-show="shiftOpen"> <span class="badge">{{shift.closingBalance | customCurrency}}</span></h3>
 			    			</div>
 			    		</div>
 		    		
@@ -84,7 +84,7 @@
 						  <h4>{{notif.productionItem.Name}}</h4>
 						  <small>{{notif.notType}}</small>
 						
-						  <p><strong>{{notif.productionItem.AvailableQuantity.toFixed(2)}} {{notif.productionItem.ProductionUnit}}</strong>
+						  <p><strong>{{notif.productionItem.AvailableQuantity.toLocaleString('en')}} {{notif.productionItem.ProductionUnit}}</strong>
 						 
 						  </p>
 						     <a ui-sref="inventoryManager" href="/inventory" class="alert-link">Resupply <i class="material-icons">keyboard_arrow_right</i></a>
@@ -97,7 +97,7 @@
                             <small>{{notif.notType}}</small>
 
                             <p>
-                                <strong>{{notif.productionItem.AvailableQuantity.toFixed(2)}} {{notif.productionItem.ProductionUnit}}</strong>
+                                <strong>{{notif.productionItem.AvailableQuantity.toLocaleString('en')}} {{notif.productionItem.ProductionUnit}}</strong>
 
                             </p>
                             <a ui-sref="inventoryManager" href="/inventory" class="alert-link">Resupply <i class="material-icons">keyboard_arrow_right</i></a>
@@ -245,10 +245,10 @@
                         <h6>{{ 'OPENAT' | translate }}: {{shiftReport.starttime|date:'shortTime'}}</h6>
                         <h5>{{ 'INVOICES' | translate }}: <span class="badge">{{(shiftReport.invoices).length}}</span></h5>
                         <h5>{{ 'ORDERS' | translate }}: <span class="badge">{{(shiftReport.orders).length}}</span></h5>
-                        <h4>{{ 'TOTAL' | translate }} {{ 'CASH' | translate }}: <span class="badge">{{shiftReport.totalCash}}</span></h4>
-                        <h4>{{ 'TOTAL' | translate }} {{ 'CREDIT' | translate }}:  <span class="badge">{{shiftReport.totalCredit}}</span></h4>
+                        <h4>{{ 'TOTAL' | translate }} {{ 'CASH' | translate }}: <span class="badge">{{shiftReport.totalCash | customCurrency}}</span></h4>
+                        <h4>{{ 'TOTAL' | translate }} {{ 'CREDIT' | translate }}:  <span class="badge">{{shiftReport.totalCredit | customCurrency}}</span></h4>
                         <h3>Impuesto de Venta: <span class="badge">{{shiftReport.tax}}</span></h3>
-                        <h3>{{ 'TOTAL' | translate }}  {{ 'SALES' | translate }} : <span class="badge">{{shiftReport.grandTotal}}</span></h3>
+                        <h3>{{ 'TOTAL' | translate }}  {{ 'SALES' | translate }} : <span class="badge">{{shiftReport.grandTotal | customCurrency}}</span></h3>
                        </div>
                         
                        
@@ -257,7 +257,7 @@
 	                        <h2>10% de Empleados</h2>
 	                        <ul class="list-group">
 							  <li class="list-group-item" ng-repeat="employee in shiftReport.employeeScore">
-							    <span class="badge">{{employee.Percentage.toFixed(2)}}</span>
+							    <span class="badge">{{employee.Percentage.toLocaleString('en')}}</span>
 							    {{employee.Employee}}
 							  </li>
 							</ul>
@@ -270,7 +270,7 @@
                                         <li class="list-group-item">
                                         
                                         	
-	                                        	<span class="badge pull-right">{{shift.openingBalance}}</span>
+	                                        	<span class="badge pull-right">{{shift.openingBalance | customCurrency}}</span>
 	                                            <strong>Caja Abierta</strong>
 	                                            <small class="lgi-text">{{shift.openShiftBy}}</small>
 	                                  
@@ -279,8 +279,8 @@
                                         <li class="list-group-item" ng-repeat="edit in shift.edits">
                                         
                                         	
-	                                        	<span class="badge pull-right" ng-if="edit.opertaiontype=='Add'">+ {{edit.editamount}}</span>
-                                            <span class="badge pull-right" ng-if="edit.opertaiontype=='Remove'">- {{edit.editamount}}</span>
+	                                        	<span class="badge pull-right" ng-if="edit.opertaiontype=='Add'">+ {{edit.editamount | customCurrency}}</span>
+                                            <span class="badge pull-right" ng-if="edit.opertaiontype=='Remove'">- {{edit.editamount | customCurrency}}</span>
 	                                            <strong>{{edit.observation}}</strong>
 	                                            <small class="lgi-text">{{edit.editby}}</small>
 	                                      
@@ -298,7 +298,7 @@
                                         <li class="list-group-item">
                                         
                                         	
-	                                        	<span class="badge pull-right">{{shift.closingBalance}}</span>
+	                                        	<span class="badge pull-right">{{shift.closingBalance | customCurrency}}</span>
 	                                            <strong>Cierre de Caja</strong>
 	                                            <small class="lgi-text">{{shift.closeShiftBy}}</small>
 	                                       

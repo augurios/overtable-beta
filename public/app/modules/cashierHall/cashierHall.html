@@ -99,7 +99,7 @@
                                         </p>
 
 
-                                        <h3 class="pull-right">{{i.prices.grandtotal}}</h3>
+                                        <h3 class="pull-right">{{i.prices.grandtotal | customCurrency}}</h3>
 
                                     </div>
 
@@ -266,9 +266,9 @@
                                             <tbody>
                                                 <tr ng-repeat="or in showData.orders">
                                                     <td>{{or.product.Name}}</td>
-                                                    <td class="text-center">{{or.product.Price}}</td>
+                                                    <td class="text-center">{{or.product.Price | customCurrency}}</td>
                                                     <td class="text-center">{{or.product.Quantity}}</td>
-                                                    <td class="text-right hidden-xs">{{or.product.Price}}</td>
+                                                    <td class="text-right hidden-xs">{{or.product.Price | customCurrency}}</td>
                                                     <td class="text-right">
                                                         <button class="btn btn-raised btn-xs btn-primary" ng-disabled="!showData.editable" ng-hide="compareBillActive"><i class="material-icons" data-toggle="modal" data-target="#modalMoreItem">add</i></button>
                                                         <button class="btn btn-raised btn-xs btn-danger" ng-show="tricolInventoryActive"><i class="material-icons" data-toggle="modal" data-target="#modalRemoveOrder">clear</i></button>
@@ -300,9 +300,9 @@
 
                                                 <tr ng-repeat="or in showData.ordersToDisplay">
                                                     <td>{{or.product.Name}}</td>
-                                                    <td class="text-center">{{or.product.Price}}</td>
+                                                    <td class="text-center">{{or.product.Price | customCurrency}}</td>
                                                     <td class="text-center">{{or.quantity}}</td>
-                                                    <td class="text-right hidden-xs">{{cashierBillsServiceFn.getProductPriceWithQuantity(or)}}</td>
+                                                    <td class="text-right hidden-xs">{{cashierBillsServiceFn.getProductPriceWithQuantity(or) | customCurrency}}</td>
                                                     <td class="text-right">
 
                                                         <button class="btn btn-raised btn-xs btn-primary" ng-hide="compareBillActive" ng-disabled="!showData.editable ">
@@ -416,14 +416,14 @@
                                         <td class="thick-line"></td>
                                         <td class="thick-line"></td>
                                         <td class="thick-line text-center"><strong>{{ 'SUBTOTAL' | translate }}</strong></td>
-                                        <td class="thick-line text-right">{{showData.prices.total}}</td>
+                                        <td class="thick-line text-right">{{showData.prices.total | customCurrency}}</td>
                                     </tr>
                                                                        <tr>
                                         <td class="no-line text-right"><button ng-click="remotePrint(showData)" ng-disabled="compareBillActive || tricolInventoryActive || printEnabled" class="btn btn-default"><span ng-hide="printEnabled">{{ 'PRINT' | translate }}</span><span ng-show="printEnabled" class="list-loader"> <i class="material-icons">adjust</i> </span></button></td>
                                         <td class="no-line"><button ng-disabled="compareBillActive || tricolInventoryActive || !showData.editable" class="btn btn-danger" ng-click="openManagerPin('Cancle')">{{ 'CANCEL' | translate }}</button></td>
                                         <td class="no-line"><button ng-disabled="compareBillActive || tricolInventoryActive || !showData.editable" ng-click="processPaymentInvoice('Invoice')" class="btn btn-raised btn-success">{{ 'PAY' | translate }}</button></td>
                                         <td class="no-line text-center"><h3>{{ 'TOTAL' | translate }}</h3></td>
-                                        <td class="no-line text-right"><h3>{{showData.prices.grandtotal}}</h3></td>
+                                        <td class="no-line text-right"><h3>{{showData.prices.grandtotal | customCurrency}}</h3></td>
 
                                     </tr>
                                 </table>
@@ -469,7 +469,7 @@
                         <div class="row">
                             <div class="col-sm-2 col-xs-2"><button ng-click="processPayment()" class="btn btn-primary btn-fab btn-fab-mini"><i class="material-icons">keyboard_backspace</i><div class="ripple-container"></div></button></div>
                              <div class="col-sm-7 col-xs-6 text-right"><h3>{{ 'TOTALDUE' | translate }} </h3></div>
-                            <div class="col-sm-3 col-xs-2"><h3>{{showData.prices.grandtotal}} <small> $ {{ inDollarAmount }}</small></h3></div>
+                            <div class="col-sm-3 col-xs-2"><h3>{{showData.prices.grandtotal | customCurrency}} <small> $ {{ inDollarAmount }}</small></h3></div>
                         </div>
                         <div class="row">
                             <div class="col-xs-8">
@@ -652,9 +652,9 @@
                                                 <!-- foreach ($order->lineItems as $line) or some such thing here -->
                                                 <tr ng-repeat="or in splittedInvoice.ordersToDisplay">
                                                     <td>{{or.product.Name}}</td>
-                                                    <td class="text-center">{{or.product.Price}}</td>
+                                                    <td class="text-center">{{or.product.Price | customCurrency}}</td>
                                                     <td class="text-center">{{or.product.Quantity}}</td>
-                                                    <td class="text-right hidden-xs">{{cashierBillsServiceFn.getProductPriceWithQuantity(or)}}</td>
+                                                    <td class="text-right hidden-xs">{{cashierBillsServiceFn.getProductPriceWithQuantity(or) | customCurrency}}</td>
                                                     <td class="text-right">
 
                                                         <button class="btn btn-raised btn-xs btn-primary" ng-hide="compareBillActive"><i class="material-icons" data-toggle="modal" data-target="#modalMoreItem">add</i></button>
@@ -688,9 +688,9 @@
 
                                                 <tr ng-repeat="or in splittedInvoice.orders">
                                                     <td>{{or.product.Name}}</td>
-                                                    <td class="text-center">{{or.product.Price}}</td>
+                                                    <td class="text-center">{{or.product.Price | customCurrency}}</td>
                                                     <td class="text-center">{{or.quantity}}</td>
-                                                    <td class="text-right hidden-xs">{{cashierBillsServiceFn.getProductPriceWithQuantity(or)}}</td>
+                                                    <td class="text-right hidden-xs">{{cashierBillsServiceFn.getProductPriceWithQuantity(or) | customCurrency}}</td>
                                                     <td class="text-right">
 
                                                         <button class="btn btn-raised btn-xs btn-primary" ng-hide="compareBillActive"><i class="material-icons" ng-click="increaseQuantityModal(or,$index)">add</i></button>
@@ -731,7 +731,7 @@
                                         <td class="thick-line"></td>
                                         <td class="thick-line"></td>
                                         <td class="thick-line text-center"><strong>{{ 'SUBTOTAL' | translate }}</strong></td>
-                                        <td class="thick-line text-right">{{splittedInvoice.prices.total}}</td>
+                                        <td class="thick-line text-right">{{splittedInvoice.prices.total | customCurrency}}</td>
                                     </tr>
                                    
                                     <tr>
@@ -744,7 +744,7 @@
                                         <td class="no-line text-right"><button ng-click="remotePrint(showData)" ng-disabled="compareBillActive || tricolInventoryActive || printEnabled" class="btn btn-default"><span ng-hide="printEnabled">{{ 'PRINT' | translate }}</span><span ng-show="printEnabled" class="list-loader"> <i class="material-icons">adjust</i> </span></button></td>
                                         <td class="no-line"><button ng-click="processPaymentInvoice('SplitInvoice')" class="btn btn-raised btn-success" ng-disabled="splittedInvoice.editable">{{ 'PAY' | translate }}</button></td>
                                         <td class="no-line text-center"><h3>{{ 'TOTAL' | translate }}</h3></td>
-                                        <td class="no-line text-right"><h3>{{splittedInvoice.prices.grandtotal}}</h3></td>
+                                        <td class="no-line text-right"><h3>{{splittedInvoice.prices.grandtotal | customCurrency}}</h3></td>
 
 
                                     </tr>
@@ -770,14 +770,14 @@
 
                                 <div class="row hidden-xs">
                                     <div class="col-xs-offset-6 col-xs-6">
-                                        <strong>{{ 'SUBTOTAL' | translate }}</strong> {{splittedInvoice.prices.total}}
+                                        <strong>{{ 'SUBTOTAL' | translate }}</strong> {{splittedInvoice.prices.total | customCurrency}}
                                     </div>
                                 </div>
 
                               
                                 <div class="row">
                                     <div class="col-xs-6"><button ng-disabled="compareBillActive || tricolInventoryActive" ng-click="processPayment('SplitInvoice')" class="btn btn-raised btn-success">{{ 'PAY' | translate }}</button></div>
-                                    <div class="col-xs-6"><h3><small>{{ 'TOTAL' | translate }}</small> {{splittedInvoice.prices.grandtotal}}</h3></div>
+                                    <div class="col-xs-6"><h3><small>{{ 'TOTAL' | translate }}</small> {{splittedInvoice.prices.grandtotal | customCurrency}}</h3></div>
                                 </div>
                             </div>
                         </div>
@@ -787,7 +787,7 @@
                         <div class="row">
                             <div class="col-sm-2 col-xs-2"><button ng-click="processPayment('SplitInvoice')" class="btn btn-primary btn-fab btn-fab-mini"><i class="material-icons">keyboard_backspace</i><div class="ripple-container"></div></button></div>
                            <div class="col-sm-7 col-xs-6 text-right"><h3>{{ 'TOTALDUE' | translate }} </h3></div>
-                            <div class="col-sm-3 col-xs-2"><h3>{{splittedInvoice.prices.grandtotal}} <small> $ {{ inDollarAmount }}</small></h3></div>
+                            <div class="col-sm-3 col-xs-2"><h3>{{splittedInvoice.prices.grandtotal | customCurrency}} <small> $ {{ inDollarAmount }}</small></h3></div>
                         </div>
                         <div class="row">
                             <div class="col-xs-8">
@@ -944,7 +944,7 @@
                                             <p class="list-group-item-text">
                                                 <span ng-show="i.people"> {{i.people}} <span >{{ 'PEOPLE' | translate }}</span></span>
                                             </p>
-                                            <h3 class="pull-right">{{i.prices.grandtotal}}</h3>
+                                            <h3 class="pull-right">{{i.prices.grandtotal | customCurrency}}</h3>
 
                                         </div>
 

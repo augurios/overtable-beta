@@ -7,6 +7,7 @@
                ['application.core',
                'application.config',
                'application.routes',
+               'application.filters',
                'welcomeEmployee', 'login', 'dashboard', 'employeeprofile', 'cashierBills', 'inventoryManager', 'ordersMonitor', 'cashierHall', 'localSettings','cashierKiosk'
                ]
            )
